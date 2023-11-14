@@ -1,0 +1,22 @@
+{
+	"name": "fajnybocik",
+	"version": "0.0.1",
+	"description": "discordowy bot",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/MisterEmoji/FajnyBocik.git"
+	},
+	"author": "Filip Gronkowski & Kuba Kopiszka",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/MisterEmoji/FajnyBocik/issues"
+	},
+	"homepage": "https://github.com/MisterEmoji/FajnyBocik#readme",
+	"dependencies": {
+		"discord.js": "^14.14.1"
+	}
+}
