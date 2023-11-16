@@ -5,5 +5,6 @@ module.exports = {
 	once: true,
 	execute(client) {
 		console.log("[INFO] Ready! logged in as " + client.user.tag);
+		client.user.setActivity("listening...", { type: "WATCHING" });
 	},
 };
