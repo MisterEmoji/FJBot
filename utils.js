@@ -2,8 +2,6 @@ const fs = require("node:fs");
 const path = require("node:path");
 
 /**
- *
- * @param {*} commandName
  * @returns absolute path of passed command with extension [.js]
  */
 const getPathOf = (commandName) => {
