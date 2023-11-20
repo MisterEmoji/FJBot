@@ -1,14 +1,27 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('user')
-		.setDescription('Provides information about the user.'),
+		.setName("user")
+		.setDescription("Provides information about the user.")
+		.addUserOption((option) =>
+			option.setName("target").setDescription("user to display info about")
+		),
 	async execute(interaction) {
-		// interaction.user is the object representing the User who ran the command
-		// interaction.member is the GuildMember object, which represents the user in the specific guild
+		const target = interaction.options.getUser("target") ?? interaction.user;
+		const member = await interaction.guild.members.fetch(target.id);
+
 		await interaction.reply(
-			`This command was run by ${interaction.user.username}, who joined on ${interaction.member.joinedAt}.s`
+			`${target.username}:
+			-> joined ${interaction.guild.name} at ${member.joinedAt.toDateString()}
+			-> created account at ${target.createdAt.toDateString()}
+			-> ${target.bot ? "is a bot" : "isn't a bot"}
+			-> ${
+				member.permissions.has(PermissionFlagsBits.Administrator)
+					? "has administrator permissions"
+					: "has no administrator permissions"
+			}
+			`
 		);
 	},
 };
