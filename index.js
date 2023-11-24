@@ -8,7 +8,6 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 client.commands = new Collection();
 const foldersPath = path.join(__dirname, "commands");
 const commandFolders = fs.readdirSync(foldersPath);
-
 // load commands
 for (const folder of commandFolders) {
 	const commandsPath = path.join(foldersPath, folder);
@@ -45,7 +44,6 @@ for (const file of eventFiles) {
 		client.on(event.name, (...args) => event.execute(...args));
 	}
 }
-
 
 // Log in to Discord with your client's token
 client.login(token);

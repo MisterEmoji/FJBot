@@ -12,16 +12,15 @@ module.exports = {
 		const member = await interaction.guild.members.fetch(target.id);
 
 		await interaction.reply(
-			`${target.username}:
-			-> joined ${interaction.guild.name} at ${member.joinedAt.toDateString()}
+			`${target}:
+			-> joined ${interaction.guild} at ${member.joinedAt.toDateString()}
 			-> created account at ${target.createdAt.toDateString()}
 			-> ${target.bot ? "is a bot" : "isn't a bot"}
 			-> ${
 				member.permissions.has(PermissionFlagsBits.Administrator)
 					? "has administrator permissions"
 					: "has no administrator permissions"
-			}
-			`
+			}`
 		);
 	},
 };
