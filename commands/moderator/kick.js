@@ -8,24 +8,27 @@ const {
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName("ban")
-		.setDescription("Select a member to ban")
+		.setName("kick")
+		.setDescription("Select a member to kick")
 		.addUserOption((option) =>
-			option.setName("target").setDescription("member to ban").setRequired(true)
+			option
+				.setName("target")
+				.setDescription("member to kick")
+				.setRequired(true)
 		)
 		.addStringOption((option) =>
-			option.setName("description").setDescription("description of ban")
+			option.setName("reason").setDescription("kick reason")
 		)
-		.setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
+		.setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
 		.setDMPermission(false),
 	async execute(interaction) {
 		const target = interaction.options.getUser("target");
-		const desc =
-			interaction.options.getString("description") ?? "no description";
+		const reason =
+			interaction.options.getString("reason") ?? "no reason specified";
 
 		const confirm = new ButtonBuilder()
 			.setCustomId("confirm")
-			.setLabel("Confirm Ban")
+			.setLabel("Confirm kick")
 			.setStyle(ButtonStyle.Danger);
 
 		const cancel = new ButtonBuilder()
@@ -36,7 +39,7 @@ module.exports = {
 		const row = new ActionRowBuilder().addComponents(cancel, confirm);
 
 		const response = await interaction.reply({
-			content: `Are you sure you want to ban ${target} with description: ${desc}?`,
+			content: `Are you sure you want to kick ${target} for reason: ${reason}?`,
 			components: [row],
 		});
 
@@ -50,16 +53,16 @@ module.exports = {
 
 			if (confirmation.customId === "confirm") {
 				await interaction.guild.members
-					.ban(target, { reason: desc })
+					.kick(target, { reason: reason })
 					.then(() => {
 						confirmation.update({
-							content: `${target} has been banned with description: ${desc}`,
+							content: `${target} has been kicked`,
 							components: [],
 						});
 					})
 					.catch(() => {
 						confirmation.update({
-							content: `failed to ban ${target}`,
+							content: `Failed to kick ${target}`,
 							components: [],
 						});
 					});

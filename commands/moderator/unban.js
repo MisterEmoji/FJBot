@@ -1,4 +1,8 @@
-const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
+const {
+	SlashCommandBuilder,
+	PermissionFlagsBits,
+	CommandInteractionOptionResolver,
+} = require("discord.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -46,7 +50,6 @@ module.exports = {
 			choice.startsWith(focusedValue)
 		);
 
-		console.log(filtered);
 		await interaction.respond(
 			filtered.map((choice) => ({ name: choice, value: choice }))
 		);

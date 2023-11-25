@@ -1,6 +1,12 @@
 {
 	"presence": {
-		"activities": [{ "name": "listening..." }],
+		"activities": [
+			{
+				"name": "servers",
+				"type": 4,
+				"state": "listening to commands..."
+			}
+		],
 		"status": "online"
 	}
 }

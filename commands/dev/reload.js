@@ -11,6 +11,7 @@ module.exports = {
 			option
 				.setName("command")
 				.setDescription("Command to reload.")
+				.setAutocomplete(true)
 				.setRequired(true)
 		),
 	async execute(interaction) {
@@ -40,5 +41,21 @@ module.exports = {
 				`There was an error while reloading a command \`${command.data.name}\`:\n\`${error.message}\``
 			);
 		}
+	},
+	async autocomplete(interaction) {
+		const focusedValue = interaction.options.getFocused();
+		// get available commands name
+		let choices = [];
+		await interaction.guild.commands.fetch().then((cmds) => {
+			choices = cmds.map((cmd) => cmd.name);
+		});
+
+		const filtered = choices.filter((choice) =>
+			choice.startsWith(focusedValue)
+		);
+
+		await interaction.respond(
+			filtered.map((choice) => ({ name: choice, value: choice }))
+		);
 	},
 };
