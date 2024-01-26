@@ -44,7 +44,7 @@ module.exports = {
 	},
 	async autocomplete(interaction) {
 		const focusedValue = interaction.options.getFocused();
-		// get available commands name
+		// get available command names
 		let choices = [];
 		await interaction.guild.commands.fetch().then((cmds) => {
 			choices = cmds.map((cmd) => cmd.name);
