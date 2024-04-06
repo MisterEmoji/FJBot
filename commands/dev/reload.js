@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require("discord.js");
-const getPathOf = require("../../utils.js");
+const { getPathOf } = require("../../utils.js");
 /*
 This commands is only capable of reloading execute function. In order to refresh data, you have to run deploy-cmds.js
 */
