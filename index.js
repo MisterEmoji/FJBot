@@ -45,5 +45,5 @@ for (const file of eventFiles) {
 	}
 }
 
-// Log in to Discord with your client's token
+try { token } catch (err) {let Error = new ReferenceError(err); console.error(Error);}
 client.login(token);
