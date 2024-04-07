@@ -1,5 +1,9 @@
 const { SlashCommandBuilder } = require("discord.js");
-const { getPathOf } = require("../../utils.js");
+const getPathOf = require("../../utils.js");
+
+// commads cache for autocomplete
+let commands = null;
+
 /*
 This commands is only capable of reloading execute function. In order to refresh data, you have to run deploy-cmds.js
 */
@@ -45,12 +49,13 @@ module.exports = {
 	async autocomplete(interaction) {
 		const focusedValue = interaction.options.getFocused();
 		// get available command names
-		let choices = [];
-		await interaction.guild.commands.fetch().then((cmds) => {
-			choices = cmds.map((cmd) => cmd.name);
-		});
+		if (commands === null) {
+			await interaction.guild.commands.fetch().then((cmds) => {
+				commands = cmds.map((cmd) => cmd.name);
+			});
+		}
 
-		const filtered = choices.filter((choice) =>
+		const filtered = commands.filter((choice) =>
 			choice.startsWith(focusedValue)
 		);
 
