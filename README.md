@@ -1,6 +1,6 @@
 # FajnyBocik
 Fajny bocik na Discorda, wsm nie wiem co on robi... Być może coś z tego będzie, jak się go dobrze rozwałkuje.
-Tworzone przez @MrrEmojii i @Pompon
+Tworzone przez @MrrEmojii i @PomPon
 
 ## Funkcje
 - Ping - sprawdza ping połączenia,
