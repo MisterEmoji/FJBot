@@ -1,7 +1,8 @@
 const { Events } = require("discord.js");
 const profile = require("./../profile.json");
 
-let interval = 0;
+// in miliseconds
+const PRESENCE_INTERVAL = 5000;
 
 module.exports = {
 	name: Events.ClientReady,
@@ -9,14 +10,23 @@ module.exports = {
 	execute(client) {
 		console.log(`[STATUS] Ready!`);
 		console.log(`[STATUS] Logged in as ${client.user.tag}`);
-		setInterval(() => {
-			client.user.setPresence(profile.presence);
-			setTimeout(() => {
-				client.user.setPresence(profile.presence2);
-			}, 5000);
-			setTimeout(() => {
-				client.user.setPresence(profile.presence3);
-			}, 10000);
-		}, 15000);
+
+		// tracks currently displayed presence index
+		// randomize on start
+		let presenceIndex = Math.floor(Math.random() * profile.presences.length);
+
+		// define presence handler ...
+		(switchPresence = () => {
+			client.user.setPresence(profile.presences[presenceIndex]);
+
+			presenceIndex++;
+			// go back to the first one if reached the end
+			if (presenceIndex === profile.presences.length) {
+				presenceIndex = 0;
+			}
+		})(); // ... and invoke it to see the presence immidiately
+
+		// change bot presence every PRESENCE_INTERVAL miliseconds
+		setInterval(switchPresence, PRESENCE_INTERVAL);
 	},
 };

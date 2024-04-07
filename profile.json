@@ -1,35 +1,37 @@
 {
-	"presence": {
-		"activities": [
-			{
-				"name": "yours commands",
-				"type": 2,
-			
-				"state": "Waiting to be called by you!"
-			}
-		],
-		"status": "online"
-	},
-	"presence2": {
-		"activities": [
-			{
-				"name": "Chilling",
-				"emoji": "👋",
-				"type": 4,
-				"state": "How's your day going?"
-			}
-		],
-		"status": "online"
-	},
-	"presence3": {
-		"activities": [
-			{
-				"name": "handling your requests",
-				"type": 5,
-				
-				"state": "Hope I can afford that!"
-			}
-		],
-		"status": "online"
-	}
+	"presences": [
+		{
+			"activities": [
+				{
+					"name": "your commands",
+					"type": 2,
+
+					"state": "Waiting to be called by you!"
+				}
+			],
+			"status": "online"
+		},
+		{
+			"activities": [
+				{
+					"name": "Chilling",
+					"emoji": "👋",
+					"type": 4,
+					"state": "How's your day going?"
+				}
+			],
+			"status": "online"
+		},
+		{
+			"activities": [
+				{
+					"name": "handling your requests",
+					"type": 5,
+
+					"state": "Hope I can afford that!"
+				}
+			],
+			"status": "online"
+		}
+	]
 }
