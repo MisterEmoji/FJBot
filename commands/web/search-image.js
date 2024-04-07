@@ -1,6 +1,12 @@
-const { SlashCommandBuilder, MessageAttachment } = require("discord.js");
+const { SlashCommandBuilder } = require("discord.js");
 const { search_api_key, search_engine_id } = require("../../config.json");
 const https = require("node:https");
+
+if (!search_api_key || !search_engine_id) {
+	console.error(
+		"[ERROR] missing search_api_key or search_engine_id in config.json"
+	);
+}
 
 // supported image mime types
 const mimeTypes = [
@@ -66,7 +72,7 @@ module.exports = {
 				});
 			})
 			.on("error", (e) => {
-				console.log(e);
+				console.error(e);
 				interaction.editReply(errorString);
 			});
 	},

@@ -3,6 +3,10 @@ const { token } = require("./config.json");
 const fs = require("node:fs");
 const path = require("node:path");
 
+if (!token) {
+	console.error("Missing token in config.json");
+}
+
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 
 client.commands = new Collection();
@@ -45,10 +49,4 @@ for (const file of eventFiles) {
 	}
 }
 
-try {
-	token;
-} catch (err) {
-	let Error = new ReferenceError(err);
-	console.error(Error);
-}
 client.login(token);
