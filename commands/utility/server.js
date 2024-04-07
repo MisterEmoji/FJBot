@@ -10,12 +10,14 @@ module.exports = {
 		.setName('server')
 		.setDescription('Provides information about the server.'),
 	async execute(interaction) {
-		serverInfoEmbed.setTitle(interaction.guild.name);
+		let serverIcon = interaction.guild.iconURL();
+		console.log(serverIcon);
+		serverInfoEmbed.setAuthor(interaction.guild.name, serverIcon);
 		serverInfoEmbed.addFields(
 			{ name: 'Registered Users', value: `${interaction.guild.memberCount}`, inline: true },
 			{ name: 'Qualified as large?', value: `${interaction.guild.large}`,  inline: true }
 		)
-		serverInfoEmbed.setThumbnail('https://i.imgur.com/cdyq23p.png');
+		serverInfoEmbed.setThumbnail(serverIcon);
 		
 		// interaction.guild is the object representing the Guild in which the command was run
 		await interaction.reply({embeds: [serverInfoEmbed]});
