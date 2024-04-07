@@ -1,6 +1,6 @@
 const { SlashCommandBuilder } = require("discord.js");
+const { readFileFromURL } = require("../../utils.js");
 const { search_api_key, search_engine_id } = require("../../config.json");
-const https = require("node:https");
 
 if (!search_api_key || !search_engine_id) {
 	console.error(
@@ -21,59 +21,42 @@ const mimeTypes = [
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName("search-image")
-		.setDescription("Search the Internet for images!")
+		.setName("search-web")
+		.setDescription("Search the Internet!")
 		.addStringOption((option) =>
 			option
 				.setName("query")
-				.setDescription("Query to search the image with.")
+				.setDescription("Query to search with.")
 				.setRequired(true)
 		),
 	async execute(interaction) {
 		const query = interaction.options.getString("query");
-		// TODO: REWORK this so interactions can synchronize (do something with http.get (maybe make external function with fetches url and returns a promise?))
-		// construct url path to google search api
+
 		const url_path = `https://www.googleapis.com/customsearch/v1?
 		key=${search_api_key}&cx=${search_engine_id}&q=${query}
 		&searchType=image`;
 
-		let parsedData;
 		const errorString = `Failed to search for \`${query}\``;
 
 		await interaction.reply(`Searching for \`${query}\`...`);
 
-		https
-			.get(url_path, (res) => {
-				if (res.statusCode !== 200) {
-					interaction.editReply(errorString);
-					return;
-				}
+		const parsedData = JSON.parse(await readFileFromURL(url_path));
 
-				let rawData = "";
-				// sum every data entry...
-				res.on("data", (chunk) => (rawData += chunk));
+		if (parsedData === null) {
+			await interaction.editReply(errorString);
+		} else {
+			// select first search result with proper extension and reply with it
+			for (result of parsedData.items) {
+				if (!mimeTypes.includes(result.mime)) continue;
 
-				// ... and then parse it
-				res.on("end", () => {
-					parsedData = JSON.parse(rawData);
+				const ext = result.fileFormat.split("/")[1];
 
-					// select first search result with proper extension and reply with it
-					for (result of parsedData.items) {
-						if (!mimeTypes.includes(result.mime)) continue;
-
-						const ext = result.fileFormat.split("/")[1];
-
-						interaction.editReply({
-							content: `Search result for \`${query}\` query:`,
-							files: [{ attachment: result.link, name: `${query}.${ext}` }],
-						});
-						break;
-					}
+				await interaction.editReply({
+					content: `Search result for \`${query}\` query:`,
+					files: [{ attachment: result.link, name: `${query}.${ext}` }],
 				});
-			})
-			.on("error", (e) => {
-				console.error(e);
-				interaction.editReply(errorString);
-			});
+				break;
+			}
+		}
 	},
 };

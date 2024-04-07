@@ -1,4 +1,5 @@
 const fs = require("node:fs");
+const https = require("node:https");
 const path = require("node:path");
 
 module.exports = {
@@ -18,5 +19,30 @@ module.exports = {
 		}
 
 		return null;
+	},
+
+	async readFileFromURL(url) {
+		return new Promise((resolve, reject) => {
+			let buffer = "";
+
+			https
+				.get(url, (res) => {
+					if (res.statusCode !== 200) {
+						reject("Failed to connect: " + url);
+						return;
+					}
+
+					// sum every data entry
+					res.on("data", (chunk) => (buffer += chunk));
+
+					res.on("end", () => {
+						resolve(buffer);
+					});
+				})
+				.on("error", (e) => {
+					reject("Failed to connect: " + url);
+					return;
+				});
+		});
 	},
 };
