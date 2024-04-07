@@ -5,7 +5,7 @@ module.exports = {
 		.setName("user")
 		.setDescription("Provides information about the user.")
 		.addUserOption((option) =>
-			option.setName("target").setDescription("user to display info about")
+			option.setName("target").setDescription("User to display info about")
 		),
 	async execute(interaction) {
 		const target = interaction.options.getUser("target") ?? interaction.user;
@@ -13,6 +13,7 @@ module.exports = {
 
 		await interaction.reply(
 			`${target}:
+			-> his UserId is: \`${target.id}\`
 			-> joined ${interaction.guild} at ${member.joinedAt.toDateString()}
 			-> created account at ${target.createdAt.toDateString()}
 			-> ${target.bot ? "is a bot" : "isn't a bot"}
