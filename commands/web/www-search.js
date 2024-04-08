@@ -32,68 +32,100 @@ module.exports = {
 		.addIntegerOption((option) =>
 			option
 				.setName("max-results")
-				.setDescription("Maximum number of returned results (from 1 to 10)")
-				.setMinValue(1)
-				.setMaxValue(10)
+				.setDescription("Maximum number of returned results")
 		)
-		.addBooleanOption((option) =>
+		.addStringOption((option) =>
 			option
-				.setName("search-for-images")
-				.setDescription("Search for information (false) or images (true)?")
+				.setName("search-type")
+				.setDescription("Search type [default: Page]")
+				.addChoices(
+					{ name: "Image", value: "image" },
+					{ name: "Page", value: "page" }
+				)
 		)
 		.addBooleanOption((option) =>
 			option
 				.setName("image-as-attachment")
 				.setDescription(
-					"Display image as a link (false) or an attachment (true)?"
+					"Display image as a link (false) or an attachment (true)? May lag on higher max-results values"
 				)
 		),
 	async execute(interaction) {
 		const query = interaction.options.getString("query");
-		const maxResults = interaction.options.getInteger("max-results") ?? 1;
 		const searchForImages =
-			interaction.options.getBoolean("search-for-images") ?? false;
+			(interaction.options.getString("search-type") ?? "page") === "page"
+				? false
+				: true;
 		const asAttachment =
-			interaction.options.getBoolean("as-attachment") ?? false;
+			interaction.options.getBoolean("image-as-attachment") ?? false;
+		const maxResults = interaction.options.getInteger("max-results") ?? 3;
 
-		const url_path = `https://www.googleapis.com/customsearch/v1?
-		key=${search_api_key}
-		&cx=${search_engine_id}
-		&q=${query}
-		${searchForImages ? "&searchType=image" : ""}
-		&num=${maxResults}`;
+		// maximum numer of attachments is 10
+		if (searchForImages && asAttachment && maxResults > 10) maxResults = 10;
 
 		const errorString = `Failed to search for \`${query}\`:\n`;
+		const urlPath = `https://www.googleapis.com/customsearch/v1?
+		key=${search_api_key}
+		&cx=${search_engine_id}
+		&filter=1
+		&q=${query}
+		${searchForImages ? "&searchType=image" : ""}
+		&num=${maxResults > 10 ? 10 : maxResults}`;
 
-		await interaction.reply(`Searching for \`${query}\`...`);
+		await interaction.deferReply();
 
-		const parsedData = JSON.parse(await readFileFromURL(url_path));
+		const reply = {
+			content: `Search result for \`${query}\`:`,
+			files: [],
+		};
+		let urlAppend = "";
 
-		if (parsedData === null) {
-			await interaction.editReply(errorString);
-		} else {
-			const files = [];
+		for (let resultsNum = 0; resultsNum != maxResults; ) {
+			let parsedData = JSON.parse(await readFileFromURL(urlPath + urlAppend));
 
-			let resultsNum = 0;
-			// select first search result with proper extension and reply with it
-			for (result of parsedData.items) {
-				if (!mimeTypes.includes(result.mime)) continue;
+			if (parsedData === null) {
+				interaction.editReply(errorString);
+				return;
+			} else {
+				// select next search results with proper extensions
+				for (result of parsedData.items) {
+					if (asAttachment && searchForImages) {
+						if (!mimeTypes.includes(result.mime)) continue;
 
-				const ext = result.fileFormat.split("/")[1];
+						const ext = result.fileFormat.split("/")[1];
 
-				files.push({
-					attachment: result.link,
-					name: `${query}${resultsNum}.${ext}`,
-				});
+						reply.files.push({
+							attachment: result.link,
+							name: `${query}${++resultsNum}.${ext}`,
+						});
+					} else {
+						const str = `\n${++resultsNum}. ${result.link}`;
 
-				resultsNum++;
-				if (resultsNum > maxResults) break;
+						// reply.content cannot exceed 2000 string length
+						if (str.length + reply.content.length > 2000) {
+							// break loop
+							resultsNum = maxResults;
+						} else {
+							reply.content += str;
+						}
+					}
+
+					if (resultsNum === maxResults) break;
+				}
+
+				// query next result page if needed
+				if (resultsNum < maxResults) {
+					const nextIndex = parsedData.queries.nextPage[0].startIndex;
+
+					if (nextIndex) {
+						urlAppend = `&start=${nextIndex}`;
+					} else {
+						break;
+					}
+				}
 			}
-
-			interaction.editReply({
-				content: `Search result for \`${query}\`:`,
-				files: files,
-			});
 		}
+
+		interaction.editReply(reply);
 	},
 };
