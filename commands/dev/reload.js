@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require("discord.js");
-const { getPathOf } = require("../../utils.js");
+const { getPathOfCmd } = require("../../utils.js");
 
 // commands cache for autocomplete
 let commands = null;
@@ -28,7 +28,7 @@ module.exports = {
 			);
 		}
 
-		const commandPath = getPathOf(commandName);
+		const commandPath = getPathOfCmd(commandName);
 
 		delete require.cache[require.resolve(commandPath)];
 

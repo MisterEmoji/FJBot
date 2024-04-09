@@ -5,8 +5,9 @@ module.exports = {
 		.setName("user")
 		.setDescription("Provides information about the user.")
 		.addUserOption((option) =>
-			option.setName("target").setDescription("User to display info about")
-		),
+			option.setName("target").setDescription("User to display info about.")
+		)
+		.setDMPermission(false),
 	async execute(interaction) {
 		const target = interaction.options.getUser("target") ?? interaction.user;
 		const member = await interaction.guild.members.fetch(target.id);

@@ -3,22 +3,22 @@ const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("timeout")
-		.setDescription("Timeout a member for a given time")
+		.setDescription("Timeout a member for a given time.")
 		.addUserOption((option) =>
 			option
 				.setName("target")
-				.setDescription("member to timeout")
+				.setDescription("Member to timeout.")
 				.setRequired(true)
 		)
 		.addNumberOption((option) =>
 			option
 				.setName("time")
 				.setDescription(
-					"duration of timeout in minutes. Omit to remove the timeout"
+					"Duration of timeout in minutes. Omit to remove the timeout."
 				)
 		)
 		.addStringOption((option) =>
-			option.setName("reason").setDescription("reason of timeout")
+			option.setName("reason").setDescription("Reason of the timeout.")
 		)
 		.setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers)
 		.setDMPermission(false),

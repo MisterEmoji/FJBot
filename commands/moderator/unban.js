@@ -7,16 +7,16 @@ const {
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("unban")
-		.setDescription("Select a member to unban")
+		.setDescription("Choose a member to unban.")
 		.addStringOption((option) =>
 			option
 				.setName("target")
-				.setDescription("username of member to unban")
+				.setDescription("The username of member to unban.")
 				.setRequired(true)
 				.setAutocomplete(true)
 		)
 		.addStringOption((option) =>
-			option.setName("description").setDescription("description of unban")
+			option.setName("description").setDescription("Description of unban.")
 		)
 		.setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
 		.setDMPermission(false),

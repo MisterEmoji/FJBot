@@ -1,12 +1,100 @@
 const { SlashCommandBuilder } = require("discord.js");
-const { readFileFromURL } = require("../../utils.js");
+const { requestURL } = require("../../utils.js");
 const { search_api_key, search_engine_id } = require("../../config.json");
 
-if (!search_api_key || !search_engine_id) {
-	console.error(
-		"[ERROR] missing search_api_key or search_engine_id in config.json"
-	);
+if (!search_api_key) {
+	throw new ReferenceError("Missing 'search_api_key' in confing.json");
 }
+if (!search_engine_id) {
+	throw new ReferenceError("Missing 'search_engine_id' in confing.json");
+}
+
+// supported search interface languages
+const iLanguages = new Map([
+	["Afrikaans", "af"],
+	["Albanian", "sq"],
+	["Amharic", "sm"],
+	["Arabic", "ar"],
+	["Azerbaijani", "az"],
+	["Basque", "eu"],
+	["Belarusian", "be"],
+	["Bengali", "bn"],
+	["Bihari", "bh"],
+	["Bosnian", "bs"],
+	["Bulgarian", "bg"],
+	["Catalan", "ca"],
+	["Chinese (Simplified)", "zh-CN"],
+	["Chinese (Traditional)", "zh-TW"],
+	["Croatian", "hr"],
+	["Czech", "cs"],
+	["Danish", "da"],
+	["Dutch", "nl"],
+	["English", "en"],
+	["Esperanto", "eo"],
+	["Estonian", "et"],
+	["Faroese", "fo"],
+	["Finnish", "fi"],
+	["French", "fr"],
+	["Frisian", "fy"],
+	["Galician", "gl"],
+	["Georgian", "ka"],
+	["German", "de"],
+	["Greek", "el"],
+	["Gujarati", "gu"],
+	["Hebrew", "iw"],
+	["Hindi", "hi"],
+	["Hungarian", "hu"],
+	["Icelandic", "is"],
+	["Indonesian", "id"],
+	["Interlingua", "ia"],
+	["Irish", "ga"],
+	["Italian", "it"],
+	["Japanese", "ja"],
+	["Javanese", "jw"],
+	["Kannada", "kn"],
+	["Korean", "ko"],
+	["Latin", "la"],
+	["Latvian", "lv"],
+	["Lithuanian", "lt"],
+	["Macedonian", "mk"],
+	["Malay", "ms"],
+	["Malayalam", "ml"],
+	["Maltese", "mt"],
+	["Marathi", "mr"],
+	["Nepali", "ne"],
+	["Norwegian", "no"],
+	["Norwegian (Nynorsk)", "nn"],
+	["Occitan", "oc"],
+	["Persian", "fa"],
+	["Polish", "pl"],
+	["Portuguese (Brazil)", "pt-BR"],
+	["Portuguese (Portugal)", "pt-PT"],
+	["Punjabi", "pa"],
+	["Romanian", "ro"],
+	["Russian", "ru"],
+	["Scots Gaelic", "gd"],
+	["Serbian", "sr"],
+	["Sinhalese", "si"],
+	["Slovak", "sk"],
+	["Slovenian", "sl"],
+	["Spanish", "es"],
+	["Sudanese", "su"],
+	["Swahili", "sw"],
+	["Swedish", "sv"],
+	["Tagalog", "tl"],
+	["Tamil", "ta"],
+	["Telugu", "te"],
+	["Thai", "th"],
+	["Tigrinya", "ti"],
+	["Turkish", "tr"],
+	["Ukrainian", "uk"],
+	["Urdu", "ur"],
+	["Uzbek", "uz"],
+	["Vietnamese", "vi"],
+	["Welsh", "cy"],
+	["Xhosa", "xh"],
+	["Zulu", "zu"],
+]);
 
 // supported image mime types
 const mimeTypes = [
@@ -32,12 +120,18 @@ module.exports = {
 		.addIntegerOption((option) =>
 			option
 				.setName("max-results")
-				.setDescription("Maximum number of returned results")
+				.setDescription("Maximum number of returned results.")
+		)
+		.addStringOption((option) =>
+			option
+				.setName("language")
+				.setDescription("Set search interface language [Default: Polish].")
+				.setAutocomplete(true)
 		)
 		.addStringOption((option) =>
 			option
 				.setName("search-type")
-				.setDescription("Search type [default: Page]")
+				.setDescription("Search type [default: Page].")
 				.addChoices(
 					{ name: "Image", value: "image" },
 					{ name: "Page", value: "page" }
@@ -47,7 +141,7 @@ module.exports = {
 			option
 				.setName("image-as-attachment")
 				.setDescription(
-					"Display image as a link (false) or an attachment (true)? May lag on higher max-results values"
+					"Display image as a link (false) or an attachment (true)? May lag on higher --max-results-- values."
 				)
 		),
 	async execute(interaction) {
@@ -56,6 +150,7 @@ module.exports = {
 			(interaction.options.getString("search-type") ?? "page") === "page"
 				? false
 				: true;
+		const lang = interaction.options.getString("language") ?? "pl";
 		const asAttachment =
 			interaction.options.getBoolean("image-as-attachment") ?? false;
 		const maxResults = interaction.options.getInteger("max-results") ?? 3;
@@ -63,28 +158,34 @@ module.exports = {
 		// maximum numer of attachments is 10
 		if (searchForImages && asAttachment && maxResults > 10) maxResults = 10;
 
-		const errorString = `Failed to search for \`${query}\`:\n`;
+		// construct custom search query url
 		const urlPath = `https://www.googleapis.com/customsearch/v1?
 		key=${search_api_key}
 		&cx=${search_engine_id}
 		&filter=1
+		&hl=${lang}
 		&q=${query}
 		${searchForImages ? "&searchType=image" : ""}
 		&num=${maxResults > 10 ? 10 : maxResults}`;
 
+		// initially reply with discord-defined 'thinking' message
 		await interaction.deferReply();
 
+		let urlAppend = "";
+		let sizeOverflow = false;
+		let resultsNum = 0;
 		const reply = {
-			content: `Search result for \`${query}\`:`,
+			content: `Search results for \`${query}\`:`,
 			files: [],
 		};
-		let urlAppend = "";
 
-		for (let resultsNum = 0; resultsNum != maxResults; ) {
-			let parsedData = JSON.parse(await readFileFromURL(urlPath + urlAppend));
+		// add results to reply until we fetch enough of them
+		// or there are no more results
+		while (resultsNum !== maxResults && !sizeOverflow) {
+			let parsedData = JSON.parse(await requestURL(urlPath + urlAppend));
 
 			if (parsedData === null) {
-				interaction.editReply(errorString);
+				interaction.editReply(`Failed to search for \`${query}\`:\n`);
 				return;
 			} else {
 				// select next search results with proper extensions
@@ -103,8 +204,9 @@ module.exports = {
 
 						// reply.content cannot exceed 2000 string length
 						if (str.length + reply.content.length > 2000) {
-							// break loop
-							resultsNum = maxResults;
+							// escape from loops
+							sizeOverflow = true;
+							break;
 						} else {
 							reply.content += str;
 						}
@@ -114,7 +216,7 @@ module.exports = {
 				}
 
 				// query next result page if needed
-				if (resultsNum < maxResults) {
+				if (resultsNum < maxResults && !sizeOverflow) {
 					const nextIndex = parsedData.queries.nextPage[0].startIndex;
 
 					if (nextIndex) {
@@ -127,5 +229,30 @@ module.exports = {
 		}
 
 		interaction.editReply(reply);
+	},
+	async autocomplete(interaction) {
+		let focusedValue = interaction.options.getFocused();
+		if (focusedValue) {
+			// capitalize first letter
+			focusedValue =
+				focusedValue.charAt(0).toUpperCase() + focusedValue.slice(1);
+		}
+
+		// filter choices
+		const filteredKeys = [];
+		for (const langKey of iLanguages.keys()) {
+			if (langKey.startsWith(focusedValue)) {
+				filteredKeys.push(langKey);
+			}
+			// 25 is maximum choices count for autocomplete
+			if (filteredKeys.length === 25) break;
+		}
+
+		await interaction.respond(
+			filteredKeys.map((choice) => ({
+				name: choice,
+				value: iLanguages.get(choice),
+			}))
+		);
 	},
 };

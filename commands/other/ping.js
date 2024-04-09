@@ -3,8 +3,10 @@ const { SlashCommandBuilder } = require("discord.js");
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("ping")
-		.setDescription("Replies with Pong!"),
+		.setDescription("Checks bot reaction time."),
 	async execute(interaction) {
-		await interaction.reply(`Pong!\nPing value: \`${Date.now() - interaction.createdTimestamp}ms\``);
+		await interaction.reply(
+			`Ping: \`${Date.now() - interaction.createdTimestamp}ms\``
+		);
 	},
 };

@@ -3,7 +3,10 @@
 	"version": "0.1.0",
 	"description": "discordowy bot",
 	"main": "index.js",
-	"scripts": {},
+	"scripts": {
+		"run": "node .",
+		"deploy": "node deploy-cmds"
+	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/MisterEmoji/FajnyBocik.git"

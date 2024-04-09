@@ -6,7 +6,7 @@ module.exports = {
 	/**
 	 * @returns absolute path of passed command with extension [.js]
 	 */
-	getPathOf(commandName) {
+	getPathOfCmd(commandName) {
 		const foldersPath = path.join(__dirname, "commands");
 		const commandFolders = fs.readdirSync(foldersPath);
 
@@ -21,7 +21,7 @@ module.exports = {
 		return null;
 	},
 
-	async readFileFromURL(url) {
+	async requestURL(url) {
 		return new Promise((resolve, reject) => {
 			let buffer = "";
 

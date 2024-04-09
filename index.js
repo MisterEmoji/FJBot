@@ -4,7 +4,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 
 if (!token) {
-	console.error("Missing token in config.json");
+	throw new ReferenceError("Missing 'token' field in config.json");
 }
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -12,12 +12,14 @@ const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 client.commands = new Collection();
 const foldersPath = path.join(__dirname, "commands");
 const commandFolders = fs.readdirSync(foldersPath);
+
 // load commands
 for (const folder of commandFolders) {
 	const commandsPath = path.join(foldersPath, folder);
 	const commandFiles = fs
 		.readdirSync(commandsPath)
 		.filter((file) => file.endsWith(".js"));
+
 	for (const file of commandFiles) {
 		const filePath = path.join(commandsPath, file);
 		const command = require(filePath);

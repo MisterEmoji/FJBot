@@ -9,12 +9,15 @@ const {
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("ban")
-		.setDescription("Select a member to ban")
+		.setDescription("Choose a member to ban.")
 		.addUserOption((option) =>
-			option.setName("target").setDescription("member to ban").setRequired(true)
+			option
+				.setName("target")
+				.setDescription("Member to ban.")
+				.setRequired(true)
 		)
 		.addStringOption((option) =>
-			option.setName("description").setDescription("description of ban")
+			option.setName("description").setDescription("Description of the ban.")
 		)
 		.setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
 		.setDMPermission(false),

@@ -9,15 +9,15 @@ const {
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("kick")
-		.setDescription("Select a member to kick")
+		.setDescription("Kick specified guild member.")
 		.addUserOption((option) =>
 			option
 				.setName("target")
-				.setDescription("member to kick")
+				.setDescription("Member to kick.")
 				.setRequired(true)
 		)
 		.addStringOption((option) =>
-			option.setName("reason").setDescription("kick reason")
+			option.setName("reason").setDescription("Reason of the kick.")
 		)
 		.setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
 		.setDMPermission(false),
