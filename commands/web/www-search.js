@@ -159,10 +159,18 @@ module.exports = {
 		if (searchForImages && asAttachment && maxResults > 10) maxResults = 10;
 
 		// construct custom search query url
+		/*
+		key:   	  		API key
+		cx:     	 		id of custom search engine to use
+		hl:     	 		specifies interface language to use (improves performance)
+		q:       			query
+		searchType: 	only valid value is 'image'
+		num:					max number of results to return in single page
+		start: 				index of result to show as first(?) in page (max number of returned results is 100 (API restriction))
+		*/
 		const urlPath = `https://www.googleapis.com/customsearch/v1?
 		key=${search_api_key}
 		&cx=${search_engine_id}
-		&filter=1
 		&hl=${lang}
 		&q=${query}
 		${searchForImages ? "&searchType=image" : ""}
@@ -183,7 +191,7 @@ module.exports = {
 		// or there are no more results
 		while (resultsNum !== maxResults && !sizeOverflow) {
 			let parsedData = JSON.parse(await requestURL(urlPath + urlAppend));
-
+			console.log(parsedData);
 			if (parsedData === null) {
 				interaction.editReply(`Failed to search for \`${query}\`:\n`);
 				return;
