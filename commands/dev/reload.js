@@ -1,7 +1,7 @@
 const { SlashCommandBuilder } = require("discord.js");
 const { getPathOf } = require("../../utils.js");
 
-// commads cache for autocomplete
+// commands cache for autocomplete
 let commands = null;
 
 /*
