@@ -4,7 +4,7 @@
 	"description": "discordowy bot",
 	"main": "core/index.js",
 	"scripts": {
-		"run": "node .",
+		"main": "node .",
 		"deploy": "node core/deploy-cmds"
 	},
 	"repository": {

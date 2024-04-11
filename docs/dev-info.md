@@ -1,6 +1,10 @@
 ## Applications
 - created another discord application (Pub_FajnyBocik) to split public commands (etc.) into separate bot:
-  - to run public bot instance use `node . public` or `node . pub` command (`node .` runs the private one).
+  - to run public bot instance use:
+    - `node . public`
+    - or `node . pub`
+    - or replace `node .` with `npm run main` if you prefer so.
+    Command (`node .` or `npm run main` runs the private instnace).
   - you can similarly use `npm run deploy` with same argument logic as above.
 
 ## Folder Structure
