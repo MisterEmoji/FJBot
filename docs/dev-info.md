@@ -4,5 +4,6 @@
   - you can similarly use `npm run deploy` with same argument logic as above.
 
 ## Folder Structure
-- `docs` folder is intended to contain project-describing information
-- `data` folder will contain all local bot-related data (for now there is only config and profile)
+- `core` folder basically contains all files other than commands and events (at least for now).
+- `docs` folder is intended to contain project-describing information.
+- `data` folder will contain all local bot-related data (for now there is only config and profile).
