@@ -1,11 +1,11 @@
 {
 	"name": "fajnybocik",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "discordowy bot",
-	"main": "index.js",
+	"main": "core/index.js",
 	"scripts": {
 		"run": "node .",
-		"deploy": "node deploy-cmds"
+		"deploy": "node core/deploy-cmds"
 	},
 	"repository": {
 		"type": "git",

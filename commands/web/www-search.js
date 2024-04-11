@@ -1,15 +1,16 @@
 const { SlashCommandBuilder } = require("discord.js");
-const { requestURL } = require("../../utils.js");
-const { search_api_key, search_engine_id } = require("../../config.json");
+const { requestURL } = require("../../core/utils.js");
+const { searchApiKey, searchEngineId } =
+	require("../../core/config-resolver.js").resolve();
 
-if (!search_api_key) {
-	throw new ReferenceError("Missing 'search_api_key' in confing.json");
+if (!searchApiKey) {
+	throw new ReferenceError("Missing 'searchApiKey' in confing.json");
 }
-if (!search_engine_id) {
-	throw new ReferenceError("Missing 'search_engine_id' in confing.json");
+if (!searchEngineId) {
+	throw new ReferenceError("Missing 'searchEngineId' in confing.json");
 }
 
-// supported search interface languages
+// list of supported search interface languages
 const iLanguages = new Map([
 	["Afrikaans", "af"],
 	["Albanian", "sq"],
@@ -159,18 +160,20 @@ module.exports = {
 		if (searchForImages && asAttachment && maxResults > 10) maxResults = 10;
 
 		// construct custom search query url
+		// documentation: https://developers.google.com/custom-search/v1
 		/*
 		key:   	  		API key
 		cx:     	 		id of custom search engine to use
 		hl:     	 		specifies interface language to use (improves performance)
 		q:       			query
-		searchType: 	only valid value is 'image'
-		num:					max number of results to return in single page
-		start: 				index of result to show as first(?) in page (max number of returned results is 100 (API restriction))
+		searchType: 	the only valid value is 'image'
+		num:					maximum number of results to return in single page
+		start: 				index of the result to show as the first in page
+		   						(maximum number of returned results is 100 (API restriction))
 		*/
 		const urlPath = `https://www.googleapis.com/customsearch/v1?
-		key=${search_api_key}
-		&cx=${search_engine_id}
+		key=${searchApiKey}
+		&cx=${searchEngineId}
 		&hl=${lang}
 		&q=${query}
 		${searchForImages ? "&searchType=image" : ""}
@@ -191,7 +194,7 @@ module.exports = {
 		// or there are no more results
 		while (resultsNum !== maxResults && !sizeOverflow) {
 			let parsedData = JSON.parse(await requestURL(urlPath + urlAppend));
-			console.log(parsedData);
+
 			if (parsedData === null) {
 				interaction.editReply(`Failed to search for \`${query}\`:\n`);
 				return;
@@ -230,6 +233,7 @@ module.exports = {
 					if (nextIndex) {
 						urlAppend = `&start=${nextIndex}`;
 					} else {
+						// break, no more results found
 						break;
 					}
 				}
