@@ -8,7 +8,7 @@ let commands = null;
 This commands is only capable of reloading execute function. In order to refresh data, you have to run deploy-cmds.js
 */
 module.exports = {
-	// exclude this command for public bot instance
+	// make this command private bot only
 	deployTarget: "private",
 	data: new SlashCommandBuilder()
 		.setName("reload")
