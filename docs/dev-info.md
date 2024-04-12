@@ -3,9 +3,10 @@
   - to run public bot instance use:
     - `node . public`
     - or `node . pub`
-    - or replace `node .` with `npm run main` if you prefer so.
-    Command (`node .` or `npm run main` runs the private instnace).
+    - or replace `node .` with `npm run login` if you prefer so.
+    Command (`node .` or `npm run login` runs the private instance).
   - you can similarly use `npm run deploy` with same argument logic as above.
+  - to deploy and run bot with one command use" `npm run [priv|pub]dp-login`.
 
 ## Folder Structure
 - `core` folder basically contains all files other than commands and events (at least for now).

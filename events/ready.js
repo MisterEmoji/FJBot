@@ -1,5 +1,5 @@
 const { Events } = require("discord.js");
-const profile = require("./../data/profile.json");
+const profile = require("./../local/profile.json");
 const { deployType } = require("../core/cmd-args");
 
 // in miliseconds

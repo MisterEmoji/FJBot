@@ -4,7 +4,8 @@
 	"description": "discordowy bot",
 	"main": "core/index.js",
 	"scripts": {
-		"dp-login": "node core/deploy-cmds && node .",
+		"privdp-login": "node core/deploy-cmds && node .",
+		"pubdp-login": "node core/deploy-cmds pub && node . pub",
 		"login": "node .",
 		"deploy": "node core/deploy-cmds"
 	},

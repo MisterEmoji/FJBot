@@ -1,6 +1,4 @@
 const { REST, Routes } = require("discord.js");
-const fs = require("node:fs");
-const path = require("node:path");
 const { loadCommands } = require("./utils");
 let { deployType } = require("../core/cmd-args");
 const { appId, guildId, botToken } =
@@ -23,7 +21,7 @@ loadCommands(commands);
 // Construct and prepare an instance of the REST module
 const rest = new REST().setToken(botToken);
 
-// and deploy your commands!
+// deploy commands
 (async () => {
 	try {
 		console.log(

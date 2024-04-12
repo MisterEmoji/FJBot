@@ -1,4 +1,4 @@
-const config = require("../data/config.json");
+const config = require("../local/config.json");
 const { deployType } = require("./cmd-args.js");
 
 module.exports = {
