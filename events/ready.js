@@ -9,7 +9,6 @@ module.exports = {
 	name: Events.ClientReady,
 	once: true,
 	execute(client) {
-		console.log(`[STATUS] Ready!`);
 		console.log(`[STATUS] Logged in as (${deployType}) ${client.user.tag}`);
 
 		// tracks currently displayed presence index

@@ -27,7 +27,7 @@ const rest = new REST().setToken(botToken);
 (async () => {
 	try {
 		console.log(
-			`Started refreshing ${commands.length} application (/) commands [${deployType}].`
+			`[LOG] Started refreshing ${commands.length} application (/) commands [${deployType}].`
 		);
 
 		// The put method is used to fully refresh all commands in the guild or everywhere with the current set
@@ -41,7 +41,7 @@ const rest = new REST().setToken(botToken);
 				  });
 
 		console.log(
-			`Successfully reloaded ${data.length} application (/) commands [${deployType}].`
+			`[LOG] Successfully reloaded ${data.length} application (/) commands [${deployType}].`
 		);
 	} catch (error) {
 		console.error(error);
