@@ -15,9 +15,9 @@
 			"activities": [
 				{
 					"name": "Chilling",
-					"emoji": "👋",
+					"emoji": "<:Happy:12345678910>",
 					"type": 4,
-					"state": "How's your day going?"
+					"state": "👋 How's your day going?"
 				}
 			],
 			"status": "online"
