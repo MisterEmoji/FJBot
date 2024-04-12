@@ -20,7 +20,9 @@
 	},
 	"homepage": "https://github.com/MisterEmoji/FajnyBocik#readme",
 	"dependencies": {
-		"discord.js": "^14.14.1"
+		"discord.js": "^14.14.1",
+		"pg": "^8.11.5",
+		"pg-hstore": "^2.3.4",
+		"sequelize": "^6.37.2"
 	}
 }
-

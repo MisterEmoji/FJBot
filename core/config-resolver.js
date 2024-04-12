@@ -3,8 +3,8 @@ const { deployType } = require("./cmd-args.js");
 
 module.exports = {
 	/**
-	 * @description function resolves config fields to match selected (through cmd argument) deployment configuration/type
-	 * @returns {object} fields value
+	 * @description function resolves config fields to match selected (through cmd arguments) deployment type
+	 * @returns {object} field values
 	 */
 	resolve() {
 		if (deployType === "public") {

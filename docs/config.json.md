@@ -4,8 +4,16 @@
 {
   // global bot settings (apply to both bot instances)
 	"global": {
-		"searchApiKey": "...",
-		"searchEngineId": "..."
+		"search": {
+			"apiKey": "...",
+			"engineId": "..."
+		},
+		"database": {
+			"host": "...",
+			"user": "...",
+			"password": "...",
+			"dbname": "..."
+		}
 	},
   // public bot instance (exposed to users)
 	"public": {

@@ -1,13 +1,13 @@
 const { SlashCommandBuilder } = require("discord.js");
 const { requestURL } = require("../../core/utils.js");
-const { searchApiKey, searchEngineId } =
-	require("../../core/config-resolver.js").resolve();
+const { apiKey, engineId } = require("../../core/config-resolver.js").resolve()
+	.search;
 
-if (!searchApiKey) {
-	throw new ReferenceError("Missing 'searchApiKey' in confing.json");
+if (!apiKey) {
+	throw new ReferenceError("Missing 'search.apiKey' in confing.json");
 }
-if (!searchEngineId) {
-	throw new ReferenceError("Missing 'searchEngineId' in confing.json");
+if (!engineId) {
+	throw new ReferenceError("Missing 'search.engineId' in confing.json");
 }
 
 // list of supported search interface languages
@@ -172,8 +172,8 @@ module.exports = {
 		   						(maximum number of returned results is 100 (API restriction))
 		*/
 		const urlPath = `https://www.googleapis.com/customsearch/v1?
-		key=${searchApiKey}
-		&cx=${searchEngineId}
+		key=${apiKey}
+		&cx=${engineId}
 		&hl=${lang}
 		&q=${query}
 		${searchForImages ? "&searchType=image" : ""}
