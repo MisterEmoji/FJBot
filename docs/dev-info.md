@@ -11,4 +11,4 @@
 ## Folder Structure
 - `core` folder basically contains all files other than commands and events (at least for now).
 - `docs` folder is intended to contain project-describing information.
-- `data` folder will contain all local bot-related data (for now there is only config and profile).
+- `local` folder will contain all local bot-related data (for now there is only config and profile).
