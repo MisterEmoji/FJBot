@@ -20,7 +20,7 @@ const connection = new Sequelize(dbname, user, password, {
 	logging: false,
 });
 
-// Sequelize handles error by its own
+// Sequelize handles errors by its own
 connection
 	.authenticate()
 	.then(() => console.log("[LOG] Connected to the database."));
