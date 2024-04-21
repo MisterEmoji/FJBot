@@ -6,7 +6,7 @@ const { deployType } = require("./cmd-args.js");
 
 // Be careful to keep this valid
 const ROOT_DIR = path.join(__dirname, "..");
-console.log(ROOT_DIR);
+
 module.exports = {
 	ROOT_DIRECTORY: ROOT_DIR,
 	/**
