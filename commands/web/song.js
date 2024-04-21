@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require("discord.js");
-const { requestURL } = require("../../core/utils");
+const { requestBody } = require("../../core/utils");
 const { apiKey } = require("../../core/config-resolver").resolve().search;
 
 module.exports = {
@@ -26,14 +26,14 @@ module.exports = {
 			$maxResults=1
       &type=video`;
 
-			const reqResult = JSON.parse(await requestURL(urlPath)).items[0];
+			const reqResult = JSON.parse(await requestBody(urlPath)).items[0];
 
 			urlPath = `https://www.googleapis.com/youtube/v3/videos?
 			id=${reqResult.id.videoId}
 			&key=${apiKey}
 			&part=snippet%2CcontentDetails`;
 
-			const videoInfo = JSON.parse(await requestURL(urlPath));
+			const videoInfo = JSON.parse(await requestBody(urlPath));
 			console.log(JSON.stringify(videoInfo, null, 2));
 		} else if (audioFile) {
 		} else {
