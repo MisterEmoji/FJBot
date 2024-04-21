@@ -5,8 +5,8 @@ const path = require("node:path");
 const { deployType } = require("./cmd-args.js");
 
 // Be careful to keep this valid
-const ROOT_DIR = __dirname.substring(0, __dirname.lastIndexOf("\\"));
-
+const ROOT_DIR = path.join(__dirname, "..");
+console.log(ROOT_DIR);
 module.exports = {
 	ROOT_DIRECTORY: ROOT_DIR,
 	/**
@@ -27,7 +27,7 @@ module.exports = {
 		return null;
 	},
 
-	async requestURL(url) {
+	async requestBody(url) {
 		return new Promise((resolve, reject) => {
 			let buffer = "";
 

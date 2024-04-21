@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require("discord.js");
-const { requestURL } = require("../../core/utils.js");
+const { requestBody } = require("../../core/utils.js");
 const { apiKey, engineId } = require("../../core/config-resolver.js").resolve()
 	.search;
 
@@ -193,7 +193,7 @@ module.exports = {
 		// add results to reply until we fetch enough of them
 		// or there are no more results
 		while (resultsNum !== maxResults && !sizeOverflow) {
-			let parsedData = JSON.parse(await requestURL(urlPath + urlAppend));
+			let parsedData = JSON.parse(await requestBody(urlPath + urlAppend));
 
 			if (parsedData === null) {
 				interaction.editReply(`Failed to search for \`${query}\`:\n`);

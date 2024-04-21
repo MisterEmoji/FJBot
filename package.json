@@ -1,7 +1,7 @@
 {
-	"name": "fajnybocik",
+	"name": "fjbot",
 	"version": "0.2.0",
-	"description": "discordowy bot",
+	"description": "Discord bot",
 	"main": "core/index.js",
 	"scripts": {
 		"privdp-login": "node core/deploy-cmds && node .",
