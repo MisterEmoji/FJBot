@@ -1,3 +1,13 @@
+/* [[ SERVER COMMAND MODULE]]
+
+Authors: MisterEmoji, PomPon.
+Desc: Server command module, presenting detailed informations about server.
+Required modules: None.
+External dependencies: Discord.JS [SlashCommandBuilder, EmbedBuilder].
+Export: CommandData & Execute.
+
+*/
+
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
@@ -5,6 +15,7 @@ module.exports = {
 		.setName("server")
 		.setDescription("Provides information about the server."),
 	async execute(interaction) {
+		// Server owner's username fetching
 		async function getOwnerInfo() {
             try {
                 const owner = await interaction.guild.fetchOwner();
@@ -14,7 +25,7 @@ module.exports = {
                 throw new ReferenceError(err.message);
             }
         }
-
+	// Server's role fetching
 		async function getServerRoles() {
 			try {
 				const roleManager = await interaction.guild.roles.fetch();
@@ -26,15 +37,15 @@ module.exports = {
 		}
 		const guildRoles = await getServerRoles() - 1;
         const ownerUsername = await getOwnerInfo();
-		// construct server info embed
+		// Contructor of Embed containing all server info
 		const serverInfo = new EmbedBuilder()
-			.setColor(0xffffff)
-			.setTitle(interaction.guild.name)
-			.setThumbnail(interaction.guild.iconURL())
-			.setImage(interaction.guild.bannerURL() ?? `https://i.imgur.com/mjPUk6r.png`)
+			.setColor(0xffffff) // Embed side-bar color
+			.setTitle(interaction.guild.name) // Header Title
+			.setThumbnail(interaction.guild.iconURL() ?? `https://i.imgur.com/mjPUk6r.png`) // Small corner image
+			.setImage(interaction.guild.bannerURL() ?? `https://i.imgur.com/mjPUk6r.png`) // Big image
 			.addFields(
 				{ name: "Users count:", value: interaction.guild.memberCount.toString(), inline: true},
-				{ name: "Roles: ", value: guildRoles.toString(), inline: true },
+				{ name: "Amount of roles: ", value: guildRoles.toString(), inline: true },
 				{ name: "Owner: ", value: ownerUsername, inline: true }
 			);
 
