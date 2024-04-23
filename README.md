@@ -31,5 +31,5 @@ Database connection allows to connect bot to PostgreSQL database. Feature is cur
 Bot system allows to reload command module. In this way bot doesn't need to be restarted everytime command module has been modified by developer.
 
 ## Authors
-[@MisterEmoji](https://github.com/MisterEmoji)
-[@PomPonn](https://github.com/PomPonn)
+- [@MisterEmoji](https://github.com/MisterEmoji) 
+- [@PomPonn](https://github.com/PomPonn)
