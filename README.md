@@ -3,7 +3,7 @@ FJBot - Discord bot, another copy of Dyno. It's created for everything and nothi
 
 ## Discord.JS Framework
 
-This bot has been developed with use of the [DiscordJS](https://discord.js.org/) framework.
+This bot has been developed with use of the [Discord.js](https://discord.js.org/) framework.
 
 ## Commands
 - ping: checks ping between bot and command executor.
@@ -31,5 +31,5 @@ Database connection allows to connect bot to PostgreSQL database. Feature is cur
 Bot system allows to reload command module. In this way bot doesn't need to be restarted everytime command module has been modified by developer.
 
 ## Authors
-@MisterEmoji
-@PomPonn
+[@MisterEmoji](https://github.com/MisterEmoji)
+[@PomPonn](https://github.com/PomPonn)
