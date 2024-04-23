@@ -1,3 +1,15 @@
+/* [[ BAN COMMAND MODULE]]
+
+Authors: PomPon, MisterEmoji.
+Desc: Server command module, presenting detailed informations about server.
+Required modules: None.
+External dependencies: Discord.JS [SlashCommandBuilder, PermissionFlagsBits,
+	ActionRowBuilder, ButtonBuilder,
+	ButtonStyle,].
+Export: CommandData & Execute.
+
+*/
+
 const {
 	SlashCommandBuilder,
 	PermissionFlagsBits,
@@ -17,7 +29,7 @@ module.exports = {
 				.setRequired(true)
 		)
 		.addStringOption((option) =>
-			option.setName("description").setDescription("Description of the ban.")
+			option.setName("reason").setDescription("Reason of the ban.")
 		)
 		.setDefaultMemberPermissions(PermissionFlagsBits.BanMembers)
 		.setDMPermission(false),
@@ -28,7 +40,7 @@ module.exports = {
 
 		const confirm = new ButtonBuilder()
 			.setCustomId("confirm")
-			.setLabel("Confirm Ban")
+			.setLabel("Confirm")
 			.setStyle(ButtonStyle.Danger);
 
 		const cancel = new ButtonBuilder()
@@ -39,8 +51,9 @@ module.exports = {
 		const row = new ActionRowBuilder().addComponents(cancel, confirm);
 
 		const response = await interaction.reply({
-			content: `Are you sure you want to ban ${target} with description: ${desc}?`,
+			content: `Are you sure you want to ban ${target} for following reason: ${desc}?`,
 			components: [row],
+			ephemeral: true
 		});
 
 		// Filter below makes sure that only the user which fired the command can interact with buttons
@@ -56,13 +69,13 @@ module.exports = {
 					.ban(target, { reason: desc })
 					.then(() => {
 						confirmation.update({
-							content: `${target} has been banned with description: ${desc}`,
+							content: `${target} has been banned for following reason: ${desc}`,
 							components: [],
 						});
 					})
 					.catch(() => {
 						confirmation.update({
-							content: `failed to ban ${target}`,
+							content: `Failed to ban ${target}`,
 							components: [],
 						});
 					});
@@ -75,7 +88,7 @@ module.exports = {
 		} catch (e) {
 			console.log(e);
 			await interaction.editReply({
-				content: "Confirmation not received within 1 minute, cancelling",
+				content: "Action cancelled: not confirmed",
 				components: [],
 			});
 		}
