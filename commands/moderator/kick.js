@@ -1,3 +1,15 @@
+/* [[ KICK COMMAND MODULE]]
+
+Authors: PomPon, MisterEmoji.
+Desc: Kick command module, presenting detailed informations about server.
+Required modules: None.
+External dependencies: Discord.JS [SlashCommandBuilder, PermissionFlagsBits,
+	ActionRowBuilder, ButtonBuilder,
+	ButtonStyle,].
+Export: CommandData & Execute.
+
+*/
+
 const {
 	SlashCommandBuilder,
 	PermissionFlagsBits,
@@ -13,14 +25,14 @@ module.exports = {
 		.addUserOption((option) =>
 			option
 				.setName("target")
-				.setDescription("Member to kick.")
+				.setDescription("Member of server to be kicked")
 				.setRequired(true)
 		)
 		.addStringOption((option) =>
 			option.setName("reason").setDescription("Reason of the kick.")
 		)
 		.setDefaultMemberPermissions(PermissionFlagsBits.KickMembers)
-		.setDMPermission(false),
+		.setDMPermission(false), // Blocks ability to use command in bot direct messages channel
 	async execute(interaction) {
 		const target = interaction.options.getUser("target");
 		const reason =
@@ -39,7 +51,7 @@ module.exports = {
 		const row = new ActionRowBuilder().addComponents(cancel, confirm);
 
 		const response = await interaction.reply({
-			content: `Are you sure you want to kick ${target} for reason: ${reason}?`,
+			content: `Are you sure you want to kick ${target} for reason: \`${reason}\`?`,
 			components: [row],
 		});
 
@@ -68,14 +80,14 @@ module.exports = {
 					});
 			} else if (confirmation.customId === "cancel") {
 				await confirmation.update({
-					content: "Action cancelled",
+					content: "❌ Action cancelled",
 					components: [],
 				});
 			}
 		} catch (e) {
 			console.log(e);
 			await interaction.editReply({
-				content: "Confirmation not received within 1 minute, cancelling",
+				content: "⌛ Action execution failed: out of time",
 				components: [],
 			});
 		}
