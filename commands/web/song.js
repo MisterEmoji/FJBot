@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require("discord.js");
-const { requestBody } = require("../../core/utils");
+const { request } = require("undici");
 const { apiKey } = require("../../core/config-resolver").resolve().search;
 
 module.exports = {
@@ -26,7 +26,7 @@ module.exports = {
 			$maxResults=1
       &type=video`;
 
-			const reqResult = JSON.parse(await requestBody(urlPath)).items[0];
+			const reqResult = JSON.parse(await request(urlPath)).items[0];
 
 			urlPath = `https://www.googleapis.com/youtube/v3/videos?
 			id=${reqResult.id.videoId}

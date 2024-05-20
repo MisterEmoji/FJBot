@@ -1,5 +1,5 @@
 const config = require("../local/config.json");
-const { deployType } = require("./cmd-args.js");
+const { deployType } = require("./utils/arguments.js");
 
 module.exports = {
 	/**

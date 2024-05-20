@@ -1,5 +1,5 @@
 const { REST, Routes } = require("discord.js");
-const { loadCommands } = require("./utils");
+const { loadCommands } = require("./utils/commands");
 let { deployType } = require("../core/cmd-args");
 const { appId, guildId, botToken } =
 	require("../core/config-resolver").resolve();

@@ -1,4 +1,4 @@
-/* 
+/*
 [[ INDEX MODULE ]]
 
 Authors: MisterEmoji, PomPon.
@@ -12,7 +12,8 @@ const { Client, Collection, GatewayIntentBits } = require("discord.js");
 // Turned off for public release
 // const Sequelize = require("sequelize");
 const config = require("./config-resolver.js").resolve();
-const { loadCommands, loadEvents } = require("./utils.js");
+const { loadCommands } = require("./utils/commands");
+const { loadEvents } = require("./utils/events");
 
 const { botToken } = config;
 const { host, user, password, dbname } = config.database;
@@ -49,4 +50,4 @@ loadCommands(client.commands);
 // load events
 loadEvents(client);
 
-client.login(botToken); 
+client.login(botToken);

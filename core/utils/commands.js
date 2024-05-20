@@ -1,14 +1,11 @@
-const { Collection, Client } = require("discord.js");
+const { Collection } = require("discord.js");
 const fs = require("node:fs");
-const https = require("node:https");
 const path = require("node:path");
-const { deployType } = require("./cmd-args.js");
+const { deployType } = require("./arguments.js");
 
-// Be careful to keep this valid
-const ROOT_DIR = path.join(__dirname, "..");
+const ROOT_DIR = path.join(__dirname, "../..");
 
 module.exports = {
-	ROOT_DIRECTORY: ROOT_DIR,
 	/**
 	 * @returns absolute path of passed command with extension [.js]
 	 */
@@ -26,34 +23,7 @@ module.exports = {
 
 		return null;
 	},
-
-	async requestBody(url) {
-		return new Promise((resolve, reject) => {
-			let buffer = "";
-
-			https
-				.get(url, (res) => {
-					if (res.statusCode !== 200) {
-						reject("Failed to connect: " + url);
-						return;
-					}
-
-					// sum every data entry
-					res.on("data", (chunk) => (buffer += chunk));
-
-					res.on("end", () => {
-						resolve(buffer);
-					});
-				})
-				.on("error", (e) => {
-					reject("Failed to connect: " + url);
-					return;
-				});
-		});
-	},
-
 	/**
-	 *
 	 * @param {Collection | Array} commands
 	 */
 	loadCommands(commands) {
@@ -101,27 +71,6 @@ module.exports = {
 						`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
 					);
 				}
-			}
-		}
-	},
-
-	/**
-	 *
-	 * @param {Client} client
-	 */
-	loadEvents(client) {
-		const eventsPath = path.join(ROOT_DIR, "events");
-		const eventFiles = fs
-			.readdirSync(eventsPath)
-			.filter((file) => file.endsWith(".js"));
-
-		for (const file of eventFiles) {
-			const filePath = path.join(eventsPath, file);
-			const event = require(filePath);
-			if (event.once) {
-				client.once(event.name, (...args) => event.execute(...args));
-			} else {
-				client.on(event.name, (...args) => event.execute(...args));
 			}
 		}
 	},
