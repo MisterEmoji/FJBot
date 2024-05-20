@@ -26,14 +26,14 @@ module.exports = {
 			$maxResults=1
       &type=video`;
 
-			const reqResult = JSON.parse(await request(urlPath)).items[0];
+			const reqResult = (await (await request(urlPath)).body.json()).items[0];
 
 			urlPath = `https://www.googleapis.com/youtube/v3/videos?
 			id=${reqResult.id.videoId}
 			&key=${apiKey}
 			&part=snippet%2CcontentDetails`;
 
-			const videoInfo = JSON.parse(await requestBody(urlPath));
+			const videoInfo = await (await request(urlPath)).body.json();
 			console.log(JSON.stringify(videoInfo, null, 2));
 		} else if (audioFile) {
 		} else {

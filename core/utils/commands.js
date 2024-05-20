@@ -2,15 +2,14 @@ const { Collection } = require("discord.js");
 const fs = require("node:fs");
 const path = require("node:path");
 const { deployType } = require("./arguments.js");
-
-const ROOT_DIR = path.join(__dirname, "../..");
+const PWD = require("./pwd.js");
 
 module.exports = {
 	/**
 	 * @returns absolute path of passed command with extension [.js]
 	 */
 	getPathOfCmd(commandName) {
-		const foldersPath = path.join(ROOT_DIR, "commands");
+		const foldersPath = path.join(PWD, "commands");
 		const commandFolders = fs.readdirSync(foldersPath);
 
 		for (const folder of commandFolders) {
@@ -27,7 +26,7 @@ module.exports = {
 	 * @param {Collection | Array} commands
 	 */
 	loadCommands(commands) {
-		const foldersPath = path.join(ROOT_DIR, "commands");
+		const foldersPath = path.join(PWD, "commands");
 		const commandFolders = fs.readdirSync(foldersPath);
 
 		let pushCmd;

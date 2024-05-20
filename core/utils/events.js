@@ -1,11 +1,15 @@
 const { Client } = require("discord.js");
+const fs = require("fs");
+const path = require("node:path");
+
+const PWD = require("../utils/pwd");
 
 module.exports = {
 	/**
 	 * @param {Client} client
 	 */
 	loadEvents(client) {
-		const eventsPath = path.join(ROOT_DIR, "events");
+		const eventsPath = path.join(PWD, "events");
 		const eventFiles = fs
 			.readdirSync(eventsPath)
 			.filter((file) => file.endsWith(".js"));

@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require("discord.js");
-const { getPathOfCmd } = require("../../core/utils.js");
+const { getPathOfCmd } = require("../../core/utils/commands");
 
 // commands names cache for autocomplete
 let commands = null;
@@ -49,7 +49,7 @@ module.exports = {
 		}
 	},
 	async autocomplete(interaction) {
-		const focusedValue = interaction.options.getFocused();
+		const focusedValue = interaction.options.getFocused().toLowerCase();
 		// get available command names
 		if (commands === null) {
 			await interaction.guild.commands.fetch().then((cmds) => {

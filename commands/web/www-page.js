@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require("discord.js");
+const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const { request } = require("undici");
 const { apiKey, engineId } = require("../../core/config-resolver.js").resolve()
 	.search;
@@ -97,21 +97,10 @@ const iLanguages = new Map([
 	["Zulu", "zu"],
 ]);
 
-// supported image mime types
-const mimeTypes = [
-	"image/apng",
-	"image/bmp",
-	"image/png",
-	"image/webp",
-	"image/avif",
-	"image/gif",
-	"image/jpeg",
-];
-
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName("www-search")
-		.setDescription("Search the Internet!")
+		.setName("www-page")
+		.setDescription("Search the Internet for websites!")
 		.addStringOption((option) =>
 			option
 				.setName("query")
@@ -122,42 +111,21 @@ module.exports = {
 			option
 				.setName("max-results")
 				.setDescription("Maximum number of returned results.")
+				.setMinValue(1)
+				.setMaxValue(100)
 		)
 		.addStringOption((option) =>
 			option
 				.setName("language")
-				.setDescription("Set search interface language [Default: Polish].")
-				.setAutocomplete(true)
-		)
-		.addStringOption((option) =>
-			option
-				.setName("search-type")
-				.setDescription("Search type [default: Page].")
-				.addChoices(
-					{ name: "Image", value: "image" },
-					{ name: "Page", value: "page" }
-				)
-		)
-		.addBooleanOption((option) =>
-			option
-				.setName("image-as-attachment")
 				.setDescription(
-					"Display image as a link (false) or an attachment (true)? May lag on higher --max-results-- values."
+					"Set search interface language for more accurate results [Default: Polish]."
 				)
+				.setAutocomplete(true)
 		),
 	async execute(interaction) {
 		const query = interaction.options.getString("query");
-		const searchForImages =
-			(interaction.options.getString("search-type") ?? "page") === "page"
-				? false
-				: true;
 		const lang = interaction.options.getString("language") ?? "pl";
-		const asAttachment =
-			interaction.options.getBoolean("image-as-attachment") ?? false;
-		const maxResults = interaction.options.getInteger("max-results") ?? 3;
-
-		// maximum numer of attachments is 10
-		if (searchForImages && asAttachment && maxResults > 10) maxResults = 10;
+		const maxResults = interaction.options.getInteger("max-results") ?? 1;
 
 		// construct custom search query url
 		// documentation: https://developers.google.com/custom-search/v1
@@ -175,59 +143,34 @@ module.exports = {
 		key=${apiKey}
 		&cx=${engineId}
 		&hl=${lang}
-		&q=${query}
-		${searchForImages ? "&searchType=image" : ""}
-		&num=${maxResults > 10 ? 10 : maxResults}`;
+		&q=${query}`;
 
 		// initially reply with discord-defined 'thinking' message
 		await interaction.deferReply();
 
 		let urlAppend = "";
-		let sizeOverflow = false;
 		let resultsNum = 0;
-		const reply = {
-			content: `Search results for \`${query}\`:`,
-			files: [],
-		};
+
+		const fields = [];
 
 		// add results to reply until we fetch enough of them
 		// or there are no more results
-		while (resultsNum !== maxResults && !sizeOverflow) {
-			let parsedData = (await request(urlPath + urlAppend)).body.json();
+		while (resultsNum !== maxResults) {
+			let parsedData = await (await request(urlPath + urlAppend)).body.json();
 
-			if (parsedData === null) {
-				interaction.editReply(`Failed to search for \`${query}\`:\n`);
-				return;
+			if (parsedData.error) {
+				throw new Error(parsedData.error.message);
 			} else {
-				// select next search results with proper extensions
+				console.log(parsedData);
+				// select next search results
 				for (result of parsedData.items) {
-					if (asAttachment && searchForImages) {
-						if (!mimeTypes.includes(result.mime)) continue;
-
-						const ext = result.fileFormat.split("/")[1];
-
-						reply.files.push({
-							attachment: result.link,
-							name: `${query}${++resultsNum}.${ext}`,
-						});
-					} else {
-						const str = `\n${++resultsNum}. ${result.link}`;
-
-						// reply.content cannot exceed 2000 string length
-						if (str.length + reply.content.length > 2000) {
-							// escape from loops
-							sizeOverflow = true;
-							break;
-						} else {
-							reply.content += str;
-						}
-					}
-
-					if (resultsNum === maxResults) break;
+					fields.push({ value: result.link });
 				}
 
+				if (resultsNum === maxResults) break;
+
 				// query next result page if needed
-				if (resultsNum < maxResults && !sizeOverflow) {
+				if (resultsNum < maxResults) {
 					const nextIndex = parsedData.queries.nextPage[0].startIndex;
 
 					if (nextIndex) {
@@ -240,7 +183,12 @@ module.exports = {
 			}
 		}
 
-		interaction.editReply(reply);
+		const embed = new EmbedBuilder()
+			.setColor(0xff0000)
+			.setTitle(`Search results for \`${query}\``)
+			.addFields(fields);
+
+		interaction.editReply({ embeds: [embed] });
 	},
 	async autocomplete(interaction) {
 		let focusedValue = interaction.options.getFocused();

@@ -1,6 +1,6 @@
 const { Events } = require("discord.js");
 const profile = require("./../local/profile.json");
-const { deployType } = require("../core/cmd-args");
+const { deployType } = require("../core/utils/arguments.js");
 
 // in miliseconds
 const PRESENCE_INTERVAL = 5000;
