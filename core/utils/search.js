@@ -121,11 +121,31 @@ module.exports = {
 				? `&num=${resultsNum}`
 				: ""
 		}`;
-
-		let response = request(urlPath + urlAppend).body.json();
+		
+		const response = request(urlPath + urlAppend).body.json();
 
 		// expose only useful information, and make it api independent, so we might use other searhc APIs in the future
 		// refer: https://developers.google.com/custom-search/v1/reference/rest/v1/Search
+
+		const reqObject = response.queries.request[0];
+		
+		const finalResponse = {
+			meta: {
+				totalResults: reqObject.totalResults,
+				language: reqObject.language,
+				searchType: reqObject.searchType,
+				
+			}
+			items: response.items.map((item) => {
+				return {
+					title: item.title,
+					link: item.link,
+					mime: item.mime,
+					// review this field. Contains info about searh result images
+					image: item.image,
+				}
+			}),
+		};
 
 		return response;
 	},
