@@ -1,6 +1,5 @@
 const { request } = require("undici");
-const { apiKey, engineId } = require("../../core/config-resolver.js").resolve()
-	.search;
+const { apiKey, engineId } = require("../config-resolver.js").resolve().search;
 
 if (!apiKey) {
 	throw new ReferenceError("Missing 'search.apiKey' in confing.json");
@@ -98,7 +97,7 @@ const iLanguages = new Map([
 
 module.exports = {
 	interfaceLanguages: iLanguages,
-	async search(query, interfaceLang, resultsNum) {
+	async webSearch(query, interfaceLang, resultsNum) {
 		// construct google custom search query url
 		// documentation: https://developers.google.com/custom-search/v1
 		/*
@@ -116,37 +115,30 @@ module.exports = {
 		&cx=${engineId}
 		&hl=${interfaceLang}
 		&q=${query}
-    ${
-			resultsNum && resultsNum <= 10 && resultsNum > 0
-				? `&num=${resultsNum}`
-				: ""
-		}`;
-		
-		const response = request(urlPath + urlAppend).body.json();
+    ${resultsNum <= 10 && resultsNum > 0 ? `&num=${resultsNum}` : ""}`;
 
-		// expose only useful information, and make it api independent, so we might use other searhc APIs in the future
-		// refer: https://developers.google.com/custom-search/v1/reference/rest/v1/Search
+		const response = await (await request(urlPath)).body.json();
 
 		const reqObject = response.queries.request[0];
-		
-		const finalResponse = {
+		return {
 			meta: {
 				totalResults: reqObject.totalResults,
 				language: reqObject.language,
 				searchType: reqObject.searchType,
-				
-			}
+			},
 			items: response.items.map((item) => {
+				console.log(item.pagemap);
 				return {
 					title: item.title,
 					link: item.link,
-					mime: item.mime,
-					// review this field. Contains info about searh result images
+					thumbnail: item.pagemap.cse_thumbnail
+						? item.pagemap.cse_thumbnail[0]
+						: {
+								src: item.pagemap.metatags["og:image"],
+						  },
 					image: item.image,
-				}
+				};
 			}),
 		};
-
-		return response;
 	},
 };
