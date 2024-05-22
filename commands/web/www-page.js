@@ -46,6 +46,7 @@ module.exports = {
 				...baseEmbed,
 				title: item.title,
 				url: item.link,
+				description: item.brief,
 				thumbnail: { url: item.thumbnail.src ?? "" },
 			};
 		});

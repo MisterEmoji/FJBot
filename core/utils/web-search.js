@@ -127,16 +127,14 @@ module.exports = {
 				searchType: reqObject.searchType,
 			},
 			items: response.items.map((item) => {
-				console.log(item.pagemap);
 				return {
 					title: item.title,
 					link: item.link,
+					brief: item.snippet,
 					thumbnail: item.pagemap.cse_thumbnail
 						? item.pagemap.cse_thumbnail[0]
-						: {
-								src: item.pagemap.metatags["og:image"],
-						  },
-					image: item.image,
+						: item.pagemap.cse_image[0],
+					image: item.image, // review this field
 				};
 			}),
 		};
