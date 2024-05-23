@@ -1,3 +1,16 @@
+/*
+
+[[ USER COMMAND MODULE]]
+
+Authors: MisterEmoji, PomPon.
+Desc: Server command module, presenting detailed informations about server.
+Required modules: None.
+External dependencies: Discord.JS [SlashCommandBuilder, EmbedBuilder].
+Export: CommandData & Execute.
+
+*/
+
+
 const { SlashCommandBuilder, PermissionFlagsBits } = require("discord.js");
 
 module.exports = {
@@ -12,6 +25,7 @@ module.exports = {
 		const target = interaction.options.getUser("target") ?? interaction.user;
 		const member = await interaction.guild.members.fetch(target.id);
 
+		// Provided user's informations
 		await interaction.reply(
 			`${target}:
 			-> his UserId is: \`${target.id}\`
