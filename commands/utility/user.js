@@ -5,7 +5,7 @@
 Authors: MisterEmoji, PomPon.
 Desc: Server command module, presenting detailed informations about server.
 Required modules: None.
-External dependencies: Discord.JS [SlashCommandBuilder, EmbedBuilder].
+External dependencies: Discord.JS [SlashCommandBuilder, PermissionFlagsBits].
 Export: CommandData & Execute.
 
 */
