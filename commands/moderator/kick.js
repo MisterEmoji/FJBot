@@ -1,7 +1,9 @@
-/* [[ KICK COMMAND MODULE]]
+/*
+
+[[ KICK COMMAND MODULE]]
 
 Authors: PomPon, MisterEmoji.
-Desc: Kick command module, presenting detailed informations about server.
+Desc: Kick command module, removing given user from the server with reason.
 Required modules: None.
 External dependencies: Discord.JS [SlashCommandBuilder, PermissionFlagsBits,
 	ActionRowBuilder, ButtonBuilder,
