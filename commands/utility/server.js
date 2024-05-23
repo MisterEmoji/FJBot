@@ -1,4 +1,6 @@
-/* [[ SERVER COMMAND MODULE]]
+/*
+
+[[ SERVER COMMAND MODULE]]
 
 Authors: MisterEmoji, PomPon.
 Desc: Server command module, presenting detailed informations about server.
