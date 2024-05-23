@@ -3,7 +3,7 @@
 [[ USER COMMAND MODULE]]
 
 Authors: MisterEmoji, PomPon.
-Desc: Server command module, presenting detailed informations about server.
+Desc: User command module, presenting detailed informations about provided user.
 Required modules: None.
 External dependencies: Discord.JS [SlashCommandBuilder, PermissionFlagsBits].
 Export: CommandData & Execute.
