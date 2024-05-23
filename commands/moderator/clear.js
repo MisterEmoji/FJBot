@@ -1,3 +1,16 @@
+/* 
+
+[[ BAN COMMAND MODULE]]
+
+Authors: PomPon, MisterEmoji.
+Desc: Clear command module, deleting given amount of commands from last two weeks.
+Required modules: None.
+External dependencies: Discord.JS [SlashCommandBuilder, ChannelType,
+	PermissionFlagsBits].
+Export: CommandData & Execute.
+
+*/
+
 const {
 	SlashCommandBuilder,
 	ChannelType,

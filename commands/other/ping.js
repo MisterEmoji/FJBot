@@ -1,4 +1,6 @@
-/* [[ PING COMMAND MODULE]]
+/*
+
+[[ PING COMMAND MODULE]]
 
 Authors: MisterEmoji, PomPon.
 Desc: Ping command module, printing out connection's latency.
