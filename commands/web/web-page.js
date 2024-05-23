@@ -1,18 +1,19 @@
 const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
 const {
-	webSearch,
 	interfaceLanguages: iLanguages,
+	WebSearcher,
 } = require("../../core/utils/web-search");
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName("www-page")
+		.setName("web-page")
 		.setDescription("Search the Internet for websites!")
 		.addStringOption((option) =>
 			option
 				.setName("query")
 				.setDescription("Query to search with.")
 				.setRequired(true)
+				.setMaxLength(400)
 		)
 		.addIntegerOption((option) =>
 			option
@@ -28,16 +29,40 @@ module.exports = {
 					"Set search interface language for more accurate results [Default: Polish]."
 				)
 				.setAutocomplete(true)
+		)
+		.addStringOption((option) =>
+			option
+				.setName("search-engine")
+				.setDescription("Set search engine to search with.")
+				.addChoices(
+					{ name: "Google", value: "google" },
+					{ name: "Brave", value: "brave" }
+				)
 		),
 	async execute(interaction) {
 		const query = interaction.options.getString("query");
 		const lang = interaction.options.getString("language") ?? "pl";
+		const se = interaction.options.getString("search-engine") ?? "google";
 		const maxResults = interaction.options.getInteger("max-results") ?? 1;
 
 		// initially reply with discord-defined 'thinking' message
 		await interaction.deferReply();
 
-		const searchResult = await webSearch(query, lang, maxResults);
+		const searcher = new WebSearcher(lang, se);
+
+		const measureStart = Date.now();
+
+		const searchResult = await searcher.search(query, maxResults);
+
+		const measureEnd = Date.now();
+
+		if (searchResult.error) {
+			interaction.followUp({
+				content: "Failed to search due to:\n" + searchResult.error,
+				ephemeral: true,
+			});
+			return;
+		}
 
 		const baseEmbed = new EmbedBuilder().setColor(0xff0000);
 
@@ -52,7 +77,9 @@ module.exports = {
 		});
 
 		embeds[embeds.length - 1].footer = {
-			text: `requested by ${interaction.user.globalName}`,
+			text: `Search time: ${
+				measureEnd - measureStart
+			}ms  •  Search engine: ${se}`,
 		};
 		embeds[embeds.length - 1].timestamp = new Date().toISOString();
 

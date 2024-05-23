@@ -16,7 +16,6 @@ const { loadCommands } = require("./utils/commands");
 const { loadEvents } = require("./utils/events");
 
 const { botToken } = config;
-const { host, user, password, dbname } = config.database;
 
 // Verify whether botToken is set
 if (!botToken) {
