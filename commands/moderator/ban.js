@@ -1,7 +1,9 @@
-/* [[ BAN COMMAND MODULE]]
+/* 
+
+[[ BAN COMMAND MODULE]]
 
 Authors: PomPon, MisterEmoji.
-Desc: Server command module, presenting detailed informations about server.
+Desc: Ban command module, operating on discord ban function.
 Required modules: None.
 External dependencies: Discord.JS [SlashCommandBuilder, PermissionFlagsBits,
 	ActionRowBuilder, ButtonBuilder,
