@@ -1,74 +1,16 @@
-const { SlashCommandBuilder, EmbedBuilder } = require("discord.js");
-const {
-	interfaceLanguages: iLanguages,
-	WebSearcher,
-} = require("../../core/utils/web-search");
+const { WebSearchCommandBuilder } = require("../../modules/web");
 
-module.exports = {
-	data: new SlashCommandBuilder()
-		.setName("web-page")
-		.setDescription("Search the Internet for websites!")
-		.addStringOption((option) =>
-			option
-				.setName("query")
-				.setDescription("Query to search with.")
-				.setRequired(true)
-				.setMaxLength(400)
-		)
-		.addIntegerOption((option) =>
-			option
-				.setName("max-results")
-				.setDescription("Maximum number of returned results.")
-				.setMinValue(1)
-				.setMaxValue(10)
-		)
-		.addStringOption((option) =>
-			option
-				.setName("language")
-				.setDescription(
-					"Set search interface language for more accurate results [Default: Polish]."
-				)
-				.setAutocomplete(true)
-		)
-		.addStringOption((option) =>
-			option
-				.setName("search-engine")
-				.setDescription("Set search engine to search with.")
-				.addChoices(
-					{ name: "Google", value: "google" },
-					{ name: "Brave", value: "brave" }
-				)
-		),
-	async execute(interaction) {
-		const query = interaction.options.getString("query");
-		const lang = interaction.options.getString("language") ?? "pl";
-		const se = interaction.options.getString("search-engine") ?? "google";
-		const maxResults = interaction.options.getInteger("max-results") ?? 1;
-
-		// initially reply with discord-defined 'thinking' message
-		await interaction.deferReply();
-
-		const searcher = new WebSearcher(lang, se);
-
-		const measureStart = Date.now();
-
-		const searchResult = await searcher.search(query, maxResults);
-
-		const measureEnd = Date.now();
-
-		if (searchResult.error) {
-			interaction.followUp({
-				content: "Failed to search due to:\n" + searchResult.error,
-				ephemeral: true,
-			});
-			return;
-		}
-
-		const baseEmbed = new EmbedBuilder().setColor(0xff0000);
+module.exports = new WebSearchCommandBuilder()
+	.setName("web-page")
+	.setDescription("Search the Internet for websites!")
+	.replyBuilder((searchResult) => {
+		const baseEmbedProps = {
+			color: 0x0000ff,
+		};
 
 		const embeds = searchResult.items.map((item) => {
 			return {
-				...baseEmbed,
+				...baseEmbedProps,
 				title: item.title,
 				url: item.link,
 				description: item.brief,
@@ -77,40 +19,12 @@ module.exports = {
 		});
 
 		embeds[embeds.length - 1].footer = {
-			text: `Search time: ${
-				measureEnd - measureStart
-			}ms  •  Search engine: ${se}`,
+			text: `search time: ${searchResult.meta.searchTime}ms  •  engine: ${searchResult.meta.searchEngine}`,
 		};
 		embeds[embeds.length - 1].timestamp = new Date().toISOString();
 
-		interaction.editReply({
-			content: `search result(s) for \`${query}\`:`,
+		return {
+			content: `search result(s) for \`${searchResult.meta.query}\`:`,
 			embeds: embeds,
-		});
-	},
-	async autocomplete(interaction) {
-		let focusedValue = interaction.options.getFocused();
-		if (focusedValue) {
-			// capitalize first letter
-			focusedValue =
-				focusedValue.charAt(0).toUpperCase() + focusedValue.slice(1);
-		}
-
-		// filter choices
-		const filteredKeys = [];
-		for (const langKey of iLanguages.keys()) {
-			if (langKey.startsWith(focusedValue)) {
-				filteredKeys.push(langKey);
-			}
-			// 25 is maximum choices count for autocomplete
-			if (filteredKeys.length === 25) break;
-		}
-
-		await interaction.respond(
-			filteredKeys.map((choice) => ({
-				name: choice,
-				value: iLanguages.get(choice),
-			}))
-		);
-	},
-};
+		};
+	});
