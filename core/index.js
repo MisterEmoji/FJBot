@@ -12,6 +12,8 @@ const { Client, Collection, GatewayIntentBits } = require("discord.js");
 // Turned off for public release
 // const Sequelize = require("sequelize");
 const config = require("./config-resolver.js").resolve();
+// [temp]
+// const { RolesSelectComponentBuilder } = require("../modules/roles.js");
 const { loadCommands } = require("./utils/commands");
 const { loadEvents } = require("./utils/events");
 
@@ -43,10 +45,32 @@ connection
 
 client.commands = new Collection();
 
-// load commands
 loadCommands(client.commands);
 
-// load events
 loadEvents(client);
 
-client.login(botToken);
+client.login(botToken)
+/*
+// [temp]
+// this comment section contains test code for roles select component
+
+.then(async () => {
+
+	const ch = await client.channels.fetch("1247208326350241914");
+	const roles = await (
+		await client.guilds.fetch("1174001410833129573")
+	).roles.fetch();
+
+	const message = new ActionRowBuilder().addComponents(
+		new RolesSelectComponentBuilder()
+			.setCustomId("roles")
+			.setMaxValues(2)
+			.addOptions(
+				roles.map((role) => {
+					return { role: { ...role }, emoji: "🧡" };
+				})
+			)
+	);
+	ch.send({ content: "Choose your roles!", components: [message] });
+});
+*/
