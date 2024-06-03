@@ -1,9 +1,9 @@
-/* 
+/*
 
-[[ BAN COMMAND MODULE]]
+[[ CLEAR COMMAND MODULE]]
 
 Authors: PomPon, MisterEmoji.
-Desc: Clear command module, deleting given amount of commands from last two weeks.
+Desc: Clear command module, deletes given amount of messages from last two weeks.
 Required modules: None.
 External dependencies: Discord.JS [SlashCommandBuilder, ChannelType,
 	PermissionFlagsBits].
@@ -20,13 +20,13 @@ const {
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName("clear")
-		.setDescription("Deletes last --count-- messages from the text channel.")
+		.setDescription("Deletes given amount of messages from last two weeks.")
 		.addIntegerOption((option) =>
 			option
 				.setName("count")
-				.setDescription(
-					"Numer of messages to delete. Omit to delete all messages."
-				)
+				.setDescription("Number of messages to delete.")
+				.setMaxValue(100)
+				.setRequired(true)
 		)
 		.addChannelOption((option) =>
 			option
@@ -37,22 +37,15 @@ module.exports = {
 		.setDefaultMemberPermissions(PermissionFlagsBits.ManageMessages)
 		.setDMPermission(false),
 	async execute(interaction) {
-		// TODO: fix this //
 		const channel =
 			interaction.options.getChannel("channel") ?? interaction.channel;
-		const mCount =
+		const count =
 			interaction.options.getInteger("count") ?? Number.MAX_SAFE_INTEGER;
 
-		console.log(channel.messages.holds);
-		const messages = await channel.messages.fetch({
-			cache: false,
-			force: true,
-		});
-		const deletedMessages = messages.size;
-		channel.bulkDelete(messages);
+		const messages = await channel.bulkDelete(count);
 
 		await interaction.reply(
-			`Deleted ${deletedMessages} messages from ${channel} channel`,
+			`Deleted \`${messages.size}\` messages from ${channel} channel.`,
 			{ ephemeral: true }
 		);
 	},

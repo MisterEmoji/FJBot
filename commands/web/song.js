@@ -1,3 +1,7 @@
+/*
+	WIP
+*/
+
 const { SlashCommandBuilder } = require("discord.js");
 const { request } = require("undici");
 const { apiKey } = require("../../core/config-resolver").resolve().search;
