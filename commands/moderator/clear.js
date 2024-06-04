@@ -44,9 +44,9 @@ module.exports = {
 
 		const messages = await channel.bulkDelete(count);
 
-		await interaction.reply(
-			`Deleted \`${messages.size}\` messages from ${channel} channel.`,
-			{ ephemeral: true }
-		);
+		await interaction.reply({
+			content: `Deleted \`${messages.size}\` messages from ${channel} channel.`,
+			ephemeral: true,
+		});
 	},
 };

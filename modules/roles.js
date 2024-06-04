@@ -3,6 +3,8 @@ const {
 	StringSelectMenuOptionBuilder,
 } = require("discord.js");
 
+const CUSTOM_ID = "roles-select-component";
+
 function MapRoleOptionsToSelects(options) {
 	return options.map((option) => {
 		return new StringSelectMenuOptionBuilder()
@@ -13,6 +15,17 @@ function MapRoleOptionsToSelects(options) {
 }
 
 class RolesSelectComponentBuilder extends StringSelectMenuBuilder {
+	constructor() {
+		super();
+
+		super.setCustomId(CUSTOM_ID);
+	}
+
+	// Does absolutely nothing.
+	setCustomId() {
+		return this;
+	}
+
 	addOptions(options) {
 		super.addOptions(MapRoleOptionsToSelects(options));
 
@@ -33,5 +46,6 @@ class RolesSelectComponentBuilder extends StringSelectMenuBuilder {
 }
 
 module.exports = {
+	RolesSelectComponentCustomId: CUSTOM_ID,
 	RolesSelectComponentBuilder: RolesSelectComponentBuilder,
 };

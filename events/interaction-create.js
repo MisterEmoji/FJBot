@@ -1,5 +1,7 @@
 const { Events } = require("discord.js");
 
+const { RolesSelectComponentCustomId } = require("../modules/roles");
+
 module.exports = {
 	name: Events.InteractionCreate,
 	async execute(interaction) {
@@ -44,6 +46,36 @@ module.exports = {
 				await command.autocomplete(interaction);
 			} catch (error) {
 				console.error(error);
+			}
+		} else if (interaction.isStringSelectMenu()) {
+			if (interaction.customId === RolesSelectComponentCustomId) {
+				if (interaction.values.length > 0) {
+					interaction.member.roles.add(
+						interaction.values,
+						"Roles added through the FJBot roles selection message"
+					);
+				}
+
+				const rolesToDelete = interaction.component.options
+					.filter((option) => {
+						return (
+							option.value !== interaction.guildId &&
+							!interaction.values.includes(option.value) &&
+							interaction.member.roles.cache.has(option.value)
+						);
+					})
+					.map((option) => {
+						return option.value;
+					});
+
+				if (rolesToDelete.length > 0) {
+					interaction.member.roles.remove(
+						rolesToDelete,
+						"Roles removed through the FJBot roles selection message"
+					);
+				}
+
+				await interaction.deferUpdate();
 			}
 		}
 	},

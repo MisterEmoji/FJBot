@@ -8,12 +8,17 @@ Required Local Modules: utils.js, config-resolver.js
 
 */
 
-const { Client, Collection, GatewayIntentBits } = require("discord.js");
+const {
+	Client,
+	Collection,
+	GatewayIntentBits,
+	ActionRowBuilder,
+} = require("discord.js");
 // Turned off for public release
 // const Sequelize = require("sequelize");
 const config = require("./config-resolver.js").resolve();
 // [temp]
-// const { RolesSelectComponentBuilder } = require("../modules/roles.js");
+const { RolesSelectComponentBuilder } = require("../modules/roles.js");
 const { loadCommands } = require("./utils/commands");
 const { loadEvents } = require("./utils/events");
 
@@ -49,28 +54,28 @@ loadCommands(client.commands);
 
 loadEvents(client);
 
-client.login(botToken)
-/*
-// [temp]
-// this comment section contains test code for roles select component
+client
+	.login(botToken)
 
-.then(async () => {
+	// [temp]
+	// this comment section contains test code for roles select component
 
-	const ch = await client.channels.fetch("1247208326350241914");
-	const roles = await (
-		await client.guilds.fetch("1174001410833129573")
-	).roles.fetch();
+	.then(async () => {
+		const ch = await client.channels.fetch("1247208326350241914");
+		const roles = await (
+			await client.guilds.fetch("1174001410833129573")
+		).roles.fetch();
 
-	const message = new ActionRowBuilder().addComponents(
-		new RolesSelectComponentBuilder()
-			.setCustomId("roles")
-			.setMaxValues(2)
-			.addOptions(
-				roles.map((role) => {
-					return { role: { ...role }, emoji: "🧡" };
-				})
-			)
-	);
-	ch.send({ content: "Choose your roles!", components: [message] });
-});
-*/
+		const message = new ActionRowBuilder().addComponents(
+			new RolesSelectComponentBuilder()
+				.setCustomId("roles")
+				.setMinValues(0)
+				.setMaxValues(2)
+				.addOptions(
+					roles.map((role) => {
+						return { role: { ...role }, emoji: "🧡" };
+					})
+				)
+		);
+		ch.send({ content: "Choose your roles!", components: [message] });
+	});
