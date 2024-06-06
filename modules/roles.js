@@ -32,6 +32,7 @@ class RolesSelectComponentBuilder extends StringSelectMenuBuilder {
 		return this;
 	}
 
+	// this method may not work, use addOptions() instead
 	setOptions(options) {
 		super.setOptions(MapRoleOptionsToSelects(options));
 

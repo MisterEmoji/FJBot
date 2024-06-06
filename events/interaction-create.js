@@ -1,6 +1,7 @@
 const { Events } = require("discord.js");
 
 const { RolesSelectComponentCustomId } = require("../modules/roles");
+const rolesSelectionMessage = require("../messages/roles-selection.js");
 
 module.exports = {
 	name: Events.InteractionCreate,
@@ -18,8 +19,7 @@ module.exports = {
 			try {
 				await command.execute(interaction);
 			} catch (error) {
-				console.error(`Error executing ${interaction.commandName}\n`);
-				console.error(error);
+				console.error(`Error executing ${interaction.commandName}\n`, error);
 				if (interaction.replied || interaction.deferred) {
 					await interaction.followUp({
 						content: `There was an error while executing this command! \n \`${error}\``,
@@ -49,33 +49,22 @@ module.exports = {
 			}
 		} else if (interaction.isStringSelectMenu()) {
 			if (interaction.customId === RolesSelectComponentCustomId) {
-				if (interaction.values.length > 0) {
-					interaction.member.roles.add(
-						interaction.values,
-						"Roles added through the FJBot roles selection message"
-					);
+				try {
+					rolesSelectionMessage.execute(interaction);
+				} catch (error) {
+					console.error(`Error executing roles select component:\n`, error);
+					if (interaction.replied || interaction.deferred) {
+						await interaction.followUp({
+							content: `There was an error while handling roles select component! \n \`${error}\``,
+							ephemeral: true,
+						});
+					} else {
+						await interaction.reply({
+							content: `There was an error while handling roles select component! \n \`${error}\``,
+							ephemeral: true,
+						});
+					}
 				}
-
-				const rolesToDelete = interaction.component.options
-					.filter((option) => {
-						return (
-							option.value !== interaction.guildId &&
-							!interaction.values.includes(option.value) &&
-							interaction.member.roles.cache.has(option.value)
-						);
-					})
-					.map((option) => {
-						return option.value;
-					});
-
-				if (rolesToDelete.length > 0) {
-					interaction.member.roles.remove(
-						rolesToDelete,
-						"Roles removed through the FJBot roles selection message"
-					);
-				}
-
-				await interaction.deferUpdate();
 			}
 		}
 	},
