@@ -66,9 +66,10 @@ module.exports = {
 				if ("data" in command && "execute" in command) {
 					pushCmd(command);
 				} else {
-					console.log(
-						`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
-					);
+				console.log(command);
+				console.log(
+					`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
+				);
 				}
 			}
 		}

@@ -5,21 +5,24 @@ module.exports = {
 	/**
 	 *
 	 * @param {string} guildId
-	 * @param {string} channelId
+	 * @param {string | Channel} channel
 	 * @param {Map<string, string>} rolesIdsWithEmojis
 	 * @param {string | undefined} text
 	 */
 	constructAndSend: async (
 		botClient,
 		guildId,
-		channelId,
+		channel,
 		rolesIdsWithEmojis,
 		text
 	) => {
 		const allRoles = await (
 			await botClient.guilds.fetch(guildId)
 		).roles.fetch();
-		const channel = await botClient.channels.fetch(channelId);
+
+		if (typeof channel === "string") {
+			channel = await botClient.channels.fetch(channel);
+		}
 
 		const rolesToSelect = allRoles
 			.filter((role) => rolesIdsWithEmojis.has(role.id))
