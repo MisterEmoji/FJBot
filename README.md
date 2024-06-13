@@ -6,17 +6,23 @@ FJBot - Discord bot, another copy of Dyno. It's created for everything and nothi
 This bot has been developed with use of the [Discord.js](https://discord.js.org/) framework.
 
 ## Commands
-- ping: checks ping between bot and command executor.
-- ban: bans given user from server.
-- unban: unbans given user from server.
-- kick: kicks given user from server.
-- timeout: mute user revoking his writing permissions.
-- www-search: allows searching for various things from the net (also photos).
-- server: gives details about the server where command is executed.
-- user: gives details about the provided user.
-- clear: clear chat history in given amount of last messages.
+Commands are separated to groups:
+- Dev (available only for bot developers):
+  - reload: reload given command:
+- Moderation:
+  - ban: bans given user from server.
+  - unban: unbans given user from server.
+  - kick: kicks given user from server.
+  - timeout: mute user revoking his writing permissions.
+  - clear: clear chat history in given amount of last messages.
+- Misc:
+  - ping: checks ping between bot and command executor.
+  - server: gives details about the server where command is executed.
+  - user: gives details about the provided user.
+- Web:
+  - www-search: allows searching for various things from the net (also photos).
 
-More in production...
+`More in production...`
 
 ## Database connection
 
