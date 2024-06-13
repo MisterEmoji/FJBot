@@ -19,26 +19,32 @@ module.exports = {
 		const msg = interaction.options.getString("message");
 		const ch = interaction.options.getChannel("channel") ?? interaction.channel;
 		const client = require("../../modules/client");
-		console.log(ch);
-		try {
-			const msgModule = require(`../../messages/${msg}.js`);
-			msgModule.constructAndSend(
-				client,
-				interaction.guildId,
-				ch,
-				new Map([
-					["1177693023455416490", "🎩"],
-					["1231009480083378248", "😀"],
-				])
-			);
 
-			await interaction.reply(
-				`Succesfuly ran selected message on ${ch} channel!`
-			);
+		let msgModule;
+
+		try {
+			msgModule = require(`../../messages/${msg}.js`);
 		} catch (err) {
-			await interaction.reply(
-				`Failed to run this message with error:\n\`${err}\``
-			);
+			await interaction.reply({
+				content: `Error: There is no message with name \`${msg}\``,
+				ephemeral: true,
+			});
 		}
+
+		msgModule.constructAndSend(
+			client,
+			interaction.guildId,
+			ch,
+			new Map([
+				["1177693023455416490", "🎩"],
+				["1231009480083378248", "😀"],
+			])
+		);
+
+		await interaction.reply({
+			content: `Succesfuly ran selected message on ${ch} channel!`,
+			ephemeral: true,
+		});
+
 	},
 };
