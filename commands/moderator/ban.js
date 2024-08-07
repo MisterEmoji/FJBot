@@ -1,4 +1,4 @@
-/* 
+/*
 
 [[ BAN COMMAND MODULE]]
 
@@ -55,7 +55,7 @@ module.exports = {
 		const response = await interaction.reply({
 			content: `Are you sure you want to ban ${target} for following reason: ${desc}?`,
 			components: [row],
-			ephemeral: true
+			ephemeral: true,
 		});
 
 		// Filter below makes sure that only the user which fired the command can interact with buttons
