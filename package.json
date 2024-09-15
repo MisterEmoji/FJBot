@@ -1,29 +1,58 @@
 {
-	"name": "fjbot",
-	"version": "0.2.0",
-	"description": "Discord bot",
-	"main": "core/index.js",
-	"scripts": {
-		"privdp-login": "node core/deploy-cmds && node .",
-		"pubdp-login": "node core/deploy-cmds pub && node . pub",
-		"login": "node .",
-		"deploy": "node core/deploy-cmds"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/MisterEmoji/FJBot.git"
-	},
-	"author": "Filip Gronkowski & Jakub Kopiszka",
-	"license": "ISC",
-	"bugs": {
-		"url": "https://github.com/MisterEmoji/FajnyBocik/issues"
-	},
-	"homepage": "https://github.com/MisterEmoji/FajnyBocik#readme",
-	"dependencies": {
-		"discord.js": "^14.14.1",
-		"pg": "^8.11.5",
-		"pg-hstore": "^2.3.4",
-		"sequelize": "^6.37.3",
-		"undici": "^6.18.0"
-	}
+  "name": "fjbot",
+  "version": "0.2.0",
+  "description": "Discord bot",
+  "main": "index.js",
+  "scripts": {
+    "start": "node .",
+    "build-frontend": "cd frontend && cross-env GENERATE_SOURCEMAP=false react-scripts build",
+    "start-dev-frontend": "cd frontend && react-scripts start",
+    "deploy-cmds": "node app/core/deploy-cmds.js",
+    "prepare": "husky install"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MisterEmoji/FJBot.git"
+  },
+  "author": "Filip Gronkowski & Jakub Kopiszka",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MisterEmoji/FJBot/issues"
+  },
+  "homepage": "https://github.com/MisterEmoji/FJBot#readme",
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "pg": "^8.11.5",
+    "pg-hstore": "^2.3.4",
+    "connect-pg-simple": "^9.0.1",
+    "cookie-parser": "^1.4.6",
+    "express": "^4.19.2",
+    "express-session": "^1.18.0",
+    "js-md5": "^0.8.3",
+    "pino-http": "^10.1.0",
+    "undici": "^6.14.1",
+    "@heroicons/react": "^2.1.3",
+    "i18next": "^23.11.2",
+    "i18next-browser-languagedetector": "^7.2.1",
+    "js-cookies": "^1.0.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-i18next": "^14.1.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.2.0",
+    "eslint": "^9.2.0",
+    "eslint-config-prettier": "^9.1.0",
+    "globals": "^15.2.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
+    "prettier": "3.2.5",
+    "cross-env": "^7.0.3",
+    "react-router-dom": "^6.23.0",
+    "react-scripts": "^5.0.1"
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix",
+    "*.{js,mjs,md,json}": "prettier --write"
+  }
 }

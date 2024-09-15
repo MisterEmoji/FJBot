@@ -1,0 +1,20 @@
+{
+  "en": {
+    "langName": "English",
+    "translation": {
+      "Login": "Login with discord",
+      "Features": "Features",
+      "Documentation": "Documentation",
+      "Contact": "Contact"
+    }
+  },
+  "pl": {
+    "langName": "Polski",
+    "translation": {
+      "Login": "Zaloguj się przez Discorda",
+      "Features": "Funkcje",
+      "Documentation": "Dokumentacja",
+      "Contact": "Kontakt"
+    }
+  }
+}

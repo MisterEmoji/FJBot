@@ -1,4 +1,9 @@
+# third party
 node_modules
-.env
-config.json
 .vscode
+.eslintcache
+.husky
+
+config
+*/logs
+*/build
