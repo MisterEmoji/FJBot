@@ -1,6 +1,7 @@
 const { request } = require("undici");
 
-const { clientId, clientSecret, webpage } = require("../../config/config.json");
+const { clientId, clientSecret, webpage } =
+  require("../../common/config-resolver.js").resolve();
 
 module.exports = {
   exchangeCode(code) {
