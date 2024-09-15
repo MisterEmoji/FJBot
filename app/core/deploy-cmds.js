@@ -1,3 +1,5 @@
+require("../../common/setup-env.js");
+
 const { REST, Routes } = require("discord.js");
 const { loadCommands } = require("./utils/commands");
 const { appId, guildId, botToken } =

@@ -1,4 +1,4 @@
-require("./common/env.js");
+require("./common/setup-env.js");
 
 const db = require("./common/db.js");
 
