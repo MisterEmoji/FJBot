@@ -1,6 +1,9 @@
 # FJBot
 FJBot - Discord bot, another copy of Dyno. It's created for everything and nothing at once.
 
+> [!NOTE]
+> This application is still under development, and may include some bugs, performence issues and some functions may be disabled.
+
 ## Discord.JS Framework
 
 This bot has been developed with use of the [Discord.js](https://discord.js.org/) framework.
