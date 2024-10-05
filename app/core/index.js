@@ -11,7 +11,7 @@ Required Local Modules: utils.js, config-resolver.js
 // Turned off for public release
 // const Sequelize = require("sequelize");
 const config = require("../../common/config-resolver.js").resolve();
-const client = require("../modules/client");
+const client = require("../temp/client.js");
 
 const { botToken } = config;
 
