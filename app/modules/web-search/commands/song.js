@@ -4,8 +4,7 @@
 
 const { SlashCommandBuilder } = require("discord.js");
 const { request } = require("undici");
-const { apiKey } = require("../../../common/config-resolver.js").resolve()
-  .search;
+const { apiKey } = require(`${global.projectdir}/common/envconfig.js`).search;
 
 module.exports = {
   data: new SlashCommandBuilder()

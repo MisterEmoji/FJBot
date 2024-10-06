@@ -1,5 +1,5 @@
 const { Client } = require("pg");
-const { db } = require("./config-resolver").resolve();
+const { db } = require("./envconfig");
 
 // create db client instance
 const client = new Client({
@@ -7,22 +7,22 @@ const client = new Client({
   application_name: "FJBot-app",
 });
 
-// connect to database
-client.connect((err) => {
-  if (err) {
-    console.error(err);
-    // exit with failure
-    process.exit(1);
-  } else {
-    console.log(
-      `[LOG] Connected to database ${db.database}@${db.host}:${db.port} as ${db.user}`
-    );
-  }
-});
-
 module.exports = {
   async query(text, params, callback) {
     return client.query(text, params, callback);
+  },
+  start() {
+    return client.connect((err) => {
+      if (err) {
+        console.error(err);
+        // exit with failure
+        process.exit(1);
+      } else {
+        console.log(
+          `[LOG] Connected to database ${db.database}@${db.host}:${db.port} as ${db.user}`
+        );
+      }
+    });
   },
   async end() {
     return client.end();

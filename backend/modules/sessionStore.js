@@ -6,7 +6,7 @@ const { Pool } = require("pg");
 const expressSession = require("express-session");
 const pgStore = require("connect-pg-simple")(expressSession);
 
-const { db } = require("../../common/config-resolver.js").resolve();
+const { db } = require("../../common/envconfig");
 
 const pool = new Pool({ ...db });
 

@@ -14,8 +14,7 @@ const pino = require("pino-http");
 const fs = require("node:fs");
 const path = require("node:path");
 
-const { webpage, cookieSecrets } =
-  require("../common/config-resolver.js").resolve();
+const { webpage, cookieSecrets } = require("../common/envconfig");
 
 const pgStore = require("./modules/sessionStore");
 

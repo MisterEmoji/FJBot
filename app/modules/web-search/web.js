@@ -1,8 +1,9 @@
 const { SlashCommandBuilder } = require("discord.js");
 const { request } = require("undici");
 
-const { search: searchConfig } =
-  require("../../common/config-resolver.js").resolve();
+const { search: searchConfig } = require(
+  global.projectdir + "/common/envconfig.js"
+);
 
 if (!searchConfig.google.apiKey) {
   throw new ReferenceError("Missing 'search.google.apiKey' in config.json");

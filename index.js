@@ -1,6 +1,8 @@
-require("./common/setup-env.js");
+require("./common/envsetup.js");
 
 const db = require("./common/db.js");
+
+db.start();
 
 // capture process interrupt signal (e.g. ctrl+c) to perform gracefull cleanup
 process.on("SIGINT", () => {
@@ -12,4 +14,4 @@ process.on("SIGINT", () => {
 });
 
 require("./backend/app.js");
-require("./app/core/index.js");
+require("./app/app.js");

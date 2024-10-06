@@ -1,5 +1,5 @@
 const { Events } = require("discord.js");
-const profile = require("../../config/profile.json");
+const profile = require(`${global.projectdir}/config/profile.json`);
 
 // in miliseconds
 const PRESENCE_INTERVAL = 5000;

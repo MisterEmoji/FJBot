@@ -1,4 +1,4 @@
-const { RolesSelectComponentBuilder } = require("../temp/roles");
+const { RolesSelectComponentBuilder } = require("./roles");
 const { ActionRowBuilder } = require("discord.js");
 
 module.exports = {

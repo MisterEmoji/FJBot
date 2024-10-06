@@ -1,5 +1,5 @@
 const { SlashCommandBuilder } = require("discord.js");
-const { getPathOfCmd } = require("../../core/utils/commands");
+const { getCommandPath } = require(global.appdir + "/core/modulesInterface.js");
 
 // commands names cache for autocomplete
 let commands = null;
@@ -8,8 +8,6 @@ let commands = null;
 This commands is only capable of reloading execute function. In order to refresh data, you have to run deploy-cmds.js
 */
 module.exports = {
-  // make this command development bot instance only
-  deployTarget: "dev",
   data: new SlashCommandBuilder()
     .setName("reload")
     .setDescription("Reloads a command.")
@@ -30,7 +28,7 @@ module.exports = {
       );
     }
 
-    const commandPath = getPathOfCmd(commandName);
+    const commandPath = getCommandPath(commandName);
 
     delete require.cache[require.resolve(commandPath)];
 

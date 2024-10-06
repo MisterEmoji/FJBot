@@ -1,7 +1,6 @@
 const { SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
-  deployTarget: "dev",
   data: new SlashCommandBuilder()
     .setName("run-msg")
     .setDescription("Runs selected test bot message.")

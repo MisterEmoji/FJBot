@@ -1,5 +1,5 @@
 /*
-[[ INDEX MODULE ]]
+[[ APP MODULE ]]
 
 Authors: MisterEmoji, PomPon.
 Description: JavaScript module responsible for bot logging in.
@@ -8,12 +8,8 @@ Required Local Modules: utils.js, config-resolver.js
 
 */
 
-// Turned off for public release
-// const Sequelize = require("sequelize");
-const config = require("../../common/config-resolver.js").resolve();
-const client = require("../temp/client.js");
-
-const { botToken } = config;
+const { botToken } = require("../common/envconfig.js");
+const client = require("./core/client.js");
 
 // Verify whether botToken is set
 if (!botToken) {

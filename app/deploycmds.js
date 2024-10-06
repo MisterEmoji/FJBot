@@ -1,9 +1,10 @@
-require("../../common/setup-env.js");
+require("../common/envsetup.js");
 
 const { REST, Routes } = require("discord.js");
-const { loadCommands } = require("./utils/commands");
-const { appId, guildId, botToken } =
-  require("../../common/config-resolver.js").resolve();
+
+const { getCommands } = require("./core/modulesInterface.js");
+const db = require("../common/db.js");
+const { appId, guildId, botToken } = require("../common/envconfig.js");
 
 if (!botToken) {
   throw new ReferenceError("Missing 'botToken' field in config.json");
@@ -12,15 +13,14 @@ if (!appId) {
   throw new ReferenceError("Missing 'clientId' field in config.json");
 }
 if (!guildId && process.env.NODE_ENV !== "prod") {
-  throw new ReferenceError("Missing 'guildId' field in config.json");
+  throw new ReferenceError("Missing development'guildId' field in config.json");
 }
 
-const commands = [];
-
-loadCommands(commands);
+const commands = Array.from(getCommands().values());
 
 // Construct and prepare an instance of the REST module
 const rest = new REST().setToken(botToken);
+db.start();
 
 // deploy commands
 (async () => {
@@ -28,6 +28,8 @@ const rest = new REST().setToken(botToken);
     console.log(
       `[LOG] Started refreshing ${commands.length} application (/) commands on ${process.env.NODE_ENV} instance.`
     );
+
+    // TODO: rework here
 
     // The put method is used to fully refresh all commands in the guild or everywhere with the current set
     const data =
@@ -44,5 +46,7 @@ const rest = new REST().setToken(botToken);
     );
   } catch (error) {
     console.error(error);
+  } finally {
+    db.end();
   }
 })();
