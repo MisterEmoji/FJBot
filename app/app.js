@@ -8,7 +8,7 @@ Required Local Modules: utils.js, config-resolver.js
 
 */
 
-const { botToken } = require("../common/envconfig.js");
+const { botToken } = require("../common/resolved-config.js");
 const client = require("./core/client.js");
 
 // Verify whether botToken is set

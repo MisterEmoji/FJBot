@@ -122,7 +122,7 @@ function getCommands() {
  * @param {BigInt} guildId
  * @returns {Collection<string, {data: SlashCommandBuilder, execute: (interaction: CommandInteraction) => Promise<void>}>}
  * @description
- * Resolves all commands in the database as a collection of commands, taking into account the module and command
+ * Resolves all commands as a collection of commands, taking into account the module and command
  * configuration for the given guildId.
  */
 async function getResolvedCommands(guildId) {
@@ -139,9 +139,6 @@ async function getResolvedCommands(guildId) {
       [BigInt(guildId)]
     )
   );
-
-  console.log(modulesConfig);
-  console.log(commandsConfig);
 
   return loadCommandsConditionally(
     // module skip test

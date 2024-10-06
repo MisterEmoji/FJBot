@@ -2,7 +2,7 @@ const { SlashCommandBuilder } = require("discord.js");
 const { request } = require("undici");
 
 const { search: searchConfig } = require(
-  global.projectdir + "/common/envconfig.js"
+  global.projectdir + "/common/resolved-config.js"
 );
 
 if (!searchConfig.google.apiKey) {

@@ -1,5 +1,5 @@
 const { Client } = require("pg");
-const { db } = require("./envconfig");
+const { db } = require("./resolved-config");
 
 // create db client instance
 const client = new Client({

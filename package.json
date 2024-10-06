@@ -7,7 +7,7 @@
     "start": "node .",
     "build-frontend": "cd frontend && cross-env GENERATE_SOURCEMAP=false react-scripts build",
     "start-dev-frontend": "cd frontend && react-scripts start",
-    "deploycmds": "node app/deploycmds.js",
+    "deploycmds": "node scripts/deployAllCommands.js",
     "prepare": "husky install"
   },
   "repository": {

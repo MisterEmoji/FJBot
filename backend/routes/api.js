@@ -8,7 +8,7 @@ const path = require("node:path");
 const { request } = require("undici");
 const { md5 } = require("js-md5");
 
-const { clientId, webpage } = require("../../common/envconfig");
+const { clientId, webpage } = require("../../common/resolved-config");
 
 const router = express.Router();
 
