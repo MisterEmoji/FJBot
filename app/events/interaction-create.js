@@ -28,6 +28,7 @@ module.exports = {
       }
 
       try {
+        require("../modules/custom/commands.js")(interaction);
         // maybe later we will pass some more args thorugh command config here, so commands can be adjustable
         await command.execute(interaction);
       } catch (error) {

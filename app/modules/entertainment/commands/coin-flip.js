@@ -9,6 +9,7 @@ External dependencies: Discord.JS [SlashCommandBuilder].
 Export: CommandData & Execute.
 
 */
+
 const { SlashCommandBuilder } = require("discord.js");
 
 module.exports = {
@@ -17,8 +18,8 @@ module.exports = {
 		.setDescription("Tosses a coin!"),
 	async execute(interaction) {
 		await interaction.reply({
-			ephemeral: true,
-			content: Math.random() > 0.5 ? "Heads!" : "Tails!",
-		});
+      ephemeral: true,
+      content: Math.random() >= 0.5 ? "Heads!" : "Tails!",
+    });
 	},
 };

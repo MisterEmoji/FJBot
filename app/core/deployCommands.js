@@ -19,7 +19,7 @@ async function deploy(guildId) {
 
   try {
     console.log(
-      `[LOG] Started refreshing ${commands.length} application (/) commands on guild id:${guildId} (${process.env.NODE_ENV}).`
+      `[LOG] Started refreshing ${commands.length} application (/) commands on guild with id:${guildId} (${process.env.NODE_ENV}).`
     );
 
     const data = await rest.put(
@@ -30,7 +30,7 @@ async function deploy(guildId) {
     );
 
     console.log(
-      `[LOG] Successfully reloaded ${data.length} application (/) commands on guild id:${guildId} (${process.env.NODE_ENV}).`
+      `[LOG] Successfully reloaded ${data.length} application (/) commands on guild with id:${guildId} (${process.env.NODE_ENV}).`
     );
   } catch (error) {
     console.error(error);

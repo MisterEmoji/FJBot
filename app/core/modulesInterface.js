@@ -19,7 +19,10 @@ function getFileName(file) {
  * @returns {Collection<string, object>} A Collection of commands, where the key is
  *   the command name and the value is the exported module.
  */
-function loadCommandsConditionally(shouldSkipModule, shouldSkipCommand) {
+function loadCommandsConditionally(
+  shouldSkipModule = null,
+  shouldSkipCommand = null
+) {
   const commands = new Collection();
 
   // Get all modules in the "modules" directory
@@ -36,6 +39,8 @@ function loadCommandsConditionally(shouldSkipModule, shouldSkipCommand) {
       moduleFolder.name,
       "commands"
     );
+
+    if (!fs.existsSync(commandFilesPath)) continue;
 
     const commandFiles = fs
       .readdirSync(commandFilesPath, { withFileTypes: true })

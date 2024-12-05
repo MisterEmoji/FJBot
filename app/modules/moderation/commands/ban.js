@@ -46,6 +46,7 @@ module.exports = {
       .setLabel("Confirm")
       .setStyle(ButtonStyle.Danger);
 
+    // Cancel button
     const cancel = new ButtonBuilder()
       .setCustomId("cancel")
       .setLabel("Cancel")
